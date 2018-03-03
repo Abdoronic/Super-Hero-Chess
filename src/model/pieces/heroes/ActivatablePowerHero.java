@@ -8,6 +8,10 @@ public abstract class ActivatablePowerHero extends Hero {
 	public ActivatablePowerHero() {
 		
 	}
+	public ActivatablePowerHero(Player player, Game game, String name) {
+		super(player,  game,  name);
+		
+	}
 	
 	public ActivatablePowerHero(Player player, Game game, String name, boolean powerUsed) {
 		super(player,  game,  name);

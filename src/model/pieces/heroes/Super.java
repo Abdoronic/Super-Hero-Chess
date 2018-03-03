@@ -7,6 +7,10 @@ public class Super extends ActivatablePowerHero{
 	public Super() {
 		
 	}
+	public Super(Player player, Game game, String name) {
+		super(player,  game,  name);
+	}
+	
 	public Super(Player player, Game game, String name, boolean powerUsed) {
 		super(player,  game,  name, powerUsed);
 	}
