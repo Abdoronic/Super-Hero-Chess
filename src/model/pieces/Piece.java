@@ -1,5 +1,8 @@
 package model.pieces;
 
+import model.game.Game;
+import model.game.Player;
+
 public abstract class Piece implements Movable {
 	private String name;
 	private Player owner;
