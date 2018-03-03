@@ -1,17 +1,21 @@
 package model.pieces;
 
-public class Piece implements Movable {
+public abstract class Piece implements Movable {
 	private String name;
-    private Player owner;
-    private Game game;
-    private int posI;
-    private int posJ;
-    
-    public Piece(Player player, Game game, String name){
-    	this.owner = player;
-    	this.game = game;
-    	this.name = name;
-    }
+	private Player owner;
+	private Game game;
+	private int posI;
+	private int posJ;
+
+	public Piece() {
+
+	}
+
+	public Piece(Player player, Game game, String name) {
+		this.owner = player;
+		this.game = game;
+		this.name = name;
+	}
 
 	public int getPosI() {
 		return posI;
