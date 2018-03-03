@@ -9,8 +9,8 @@ public class SideKickP2 extends SideKick {
 
 	}
 
-	public SideKickP2(Player player, Game game, String name) {
-		super(player, game, name);
+	public SideKickP2(Game game, String name) {
+		super(game.getPlayer2(), game, name);
 	}
 
 }
