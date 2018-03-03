@@ -2,12 +2,13 @@ package model.game;
 
 import java.util.ArrayList;
 
+import model.pieces.Piece;
+
 public class Player {
 	private String name;
 	private int payloadPos;
 	private int sideKilled;
-	//object until we make class Piece
-	private ArrayList<Object> deadCharacters;
+	private ArrayList<Piece> deadCharacters;
 	
 	public Player(String name) {
 		this.name = name;
@@ -34,7 +35,7 @@ public class Player {
 		this.sideKilled = sideKilled;
 	}
 	
-	public ArrayList<Object> getDeadCharacters() {
+	public ArrayList<Piece> getDeadCharacters() {
 		return deadCharacters;
 	}
 }
