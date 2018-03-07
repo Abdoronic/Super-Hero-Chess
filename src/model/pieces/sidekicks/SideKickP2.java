@@ -1,7 +1,6 @@
 package model.pieces.sidekicks;
 
 import model.game.Game;
-import model.game.Player;
 
 public class SideKickP2 extends SideKick {
 
