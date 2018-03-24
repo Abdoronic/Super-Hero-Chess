@@ -62,25 +62,25 @@ public class Ranged extends ActivatablePowerHero {
 		int j = this.getPosJ();
 		Piece p = null;
 		if (d == Direction.DOWN) {
-			for (int k = i; k < 7; k++) {
+			for (int k = i+1; k < 7; k++) {
 				p = getGame().getCellAt(k, j).getPiece();
 				if (p != null)
 					break;
 			}
 		} else if (d == Direction.UP) {
-			for (int k = i; k > -1; k--) {
+			for (int k = i-1; k > -1; k--) {
 				p = getGame().getCellAt(k, j).getPiece();
 				if (p != null)
 					break;
 			}
 		} else if (d == Direction.LEFT) {
-			for (int k = j; k > -1; k--) {
+			for (int k = j-1; k > -1; k--) {
 				p = getGame().getCellAt(i, k).getPiece();
 				if (p != null)
 					break;
 			}
 		} else if (d == Direction.RIGHT) {
-			for (int k = j; k < 6; k++) {
+			for (int k = j+1; k < 6; k++) {
 				p = getGame().getCellAt(i, k).getPiece();
 				if (p != null)
 					break;
@@ -89,12 +89,15 @@ public class Ranged extends ActivatablePowerHero {
 			throw new InvalidPowerDirectionException("You can't attack diagnoally", this, d);
 		}
 		if (p == null) {
-			new InvalidPowerDirectionException("You can't attack Empty cells", this, d);
-		} else if (p.getOwner() == this.getOwner()) {
-			throw new InvalidPowerDirectionException("You can't attack a friend", this, d);
+			throw new InvalidPowerDirectionException("You can't attack Empty cells", this, d);
 		} else {
-			attack(p);
-			getGame().switchTurns();
+			if (p.getOwner() == this.getOwner()) {
+				throw new InvalidPowerDirectionException("You can't attack a friend", this, d);
+			} else {
+				attack(p);
+				setPowerUsed(true);
+				getGame().switchTurns();
+			}
 		}
 
 	}

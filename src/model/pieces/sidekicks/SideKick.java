@@ -20,6 +20,7 @@ public abstract class SideKick extends Piece {
 	public void attack(Piece target) {
 		Player attacked = target.getOwner();
 		Player attacker = getGame().getCurrentPlayer();
+		boolean wasArmored = false;
 		if(target instanceof SideKick) {
 	       	attacker.setSideKilled(attacker.getSideKilled() + 1);
 	       	if(attacker.getSideKilled() % 2 == 0)
@@ -27,6 +28,7 @@ public abstract class SideKick extends Piece {
 	       	getGame().getCellAt(target.getPosI(),target.getPosJ()).setPiece(null);
 		} else if(target instanceof Armored && ((Armored) target).isArmorUp()) {
 			((Armored) target).setArmorUp(false);
+			wasArmored = true;
 		} else {
 			attacked.getDeadCharacters().add(target);
 	       	attacker.setPayloadPos(attacker.getPayloadPos() + 1);
@@ -45,7 +47,8 @@ public abstract class SideKick extends Piece {
 	       		attackerCell.setPiece(new Tech(attacker, getGame(), (attacker == getGame().getPlayer1())? "T1" : "T2"));
 	       	getGame().getCellAt(target.getPosI(),target.getPosJ()).setPiece(null);
 		}
-		getGame().checkWinner();
+		if(!wasArmored)
+			getGame().checkWinner();
 	}
 
 	@Override

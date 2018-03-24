@@ -28,7 +28,6 @@ public class Speedster extends NonActivatablePowerHero {
 		case UPRIGHT : moveUpRight(); break;
 		default :throw new UnallowedMovementException("This move is unallowed", this, r);
 		}
-		
 	}
     
 	private void helperMove(int oldI, int oldJ, int i, int j, Direction r) throws OccupiedCellException {

@@ -21,6 +21,7 @@ public class Cell {
 	public void setPiece(Piece piece) {
 		this.piece = piece;
 	}
+	
 	@Override
 	public String toString() {
 		if(piece != null)
