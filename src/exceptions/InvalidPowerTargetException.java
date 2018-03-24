@@ -2,18 +2,16 @@ package exceptions;
 
 import model.pieces.Piece;
 
+@SuppressWarnings("serial")
 public class InvalidPowerTargetException extends InvalidPowerUseException {
+
 	private Piece target;
-	
-	public InvalidPowerTargetException() {
-		
-	}
-	
+
 	public InvalidPowerTargetException(Piece trigger, Piece target) {
 		super(trigger);
 		this.target = target;
 	}
-	
+
 	public InvalidPowerTargetException(String s, Piece trigger, Piece target) {
 		super(s, trigger);
 		this.target = target;
@@ -22,4 +20,5 @@ public class InvalidPowerTargetException extends InvalidPowerUseException {
 	public Piece getTarget() {
 		return target;
 	}
+
 }

@@ -3,12 +3,10 @@ package exceptions;
 import model.game.Direction;
 import model.pieces.Piece;
 
+@SuppressWarnings("serial")
 public abstract class InvalidMovementException extends GameActionException {
+
 	private Direction direction;
-
-	public InvalidMovementException() {
-
-	}
 
 	public InvalidMovementException(Piece trigger, Direction direction) {
 		super(trigger);
@@ -19,8 +17,9 @@ public abstract class InvalidMovementException extends GameActionException {
 		super(s, trigger);
 		this.direction = direction;
 	}
-
+	
 	public Direction getDirection() {
 		return direction;
 	}
+
 }
