@@ -1,5 +1,8 @@
 package model.pieces.heroes;
 
+import exceptions.OccupiedCellException;
+import exceptions.UnallowedMovementException;
+import exceptions.WrongTurnException;
 import model.game.Direction;
 import model.game.Game;
 import model.game.Player;
@@ -11,7 +14,9 @@ public class Speedster extends NonActivatablePowerHero {
 	}
 	
 	@Override
-	public void move(Direction r) {
+	public void move(Direction r) throws WrongTurnException, UnallowedMovementException, OccupiedCellException {
+		if(this.getOwner() != getGame().getCurrentPlayer())
+			throw new WrongTurnException("That is not your turn", this);
 		switch(r) {
 		case DOWN : moveDown(); break;
 		case DOWNLEFT : moveDownLeft(); break;
@@ -21,19 +26,19 @@ public class Speedster extends NonActivatablePowerHero {
 		case UP : moveUp(); break;
 		case UPLEFT : moveUpLeft(); break;
 		case UPRIGHT : moveUpRight(); break;
-		default : break;//throw Exception 
+		default :throw new UnallowedMovementException("This move is unallowed", this, r);
 		}
 		
 	}
     
-	private void helperMove(int oldI, int oldJ, int i, int j) {
+	private void helperMove(int oldI, int oldJ, int i, int j, Direction r) throws OccupiedCellException {
 		if (getGame().getCellAt(i, j).getPiece() == null) {
 			getGame().getCellAt(i, j).setPiece(this);
 			getGame().getCellAt(oldI, oldJ).setPiece(null);
 			this.setPosI(i);
 			this.setPosJ(j);
 		} else if (getGame().getCellAt(i, j).getPiece().getOwner() == this.getOwner()) {
-			// exception friendly so u understand
+			throw new OccupiedCellException("This an Occupied Cell by a friendly", this, r);
 		} else {
 			attack(getGame().getCellAt(i, j).getPiece());
 			if (getGame().getCellAt(i, j).getPiece() == null) {
@@ -46,7 +51,7 @@ public class Speedster extends NonActivatablePowerHero {
 		getGame().switchTurns();
 	}
 
-	public void moveDown() {
+	public void moveDown() throws OccupiedCellException {
 		int oldI = getPosI();
 		int oldJ = getPosJ();
 		int i = getPosI();
@@ -56,10 +61,10 @@ public class Speedster extends NonActivatablePowerHero {
 			i = 0;
 	    if(i==8)
 			i=1;
-		helperMove(oldI, oldJ, i, j);
+		helperMove(oldI, oldJ, i, j, Direction.DOWN);
 	}
 
-	public void moveDownLeft() {
+	public void moveDownLeft() throws OccupiedCellException {
 		int oldI = getPosI();
 		int oldJ = getPosJ();
 		int i = getPosI();
@@ -76,10 +81,10 @@ public class Speedster extends NonActivatablePowerHero {
 		if (j == -2)
 			j = 4;
 		
-		helperMove(oldI, oldJ, i, j);
+		helperMove(oldI, oldJ, i, j, Direction.DOWNLEFT);
 	}
 
-	public void moveDownRight() {
+	public void moveDownRight() throws OccupiedCellException {
 		int oldI = getPosI();
 		int oldJ = getPosJ();
 		int i = getPosI();
@@ -95,10 +100,10 @@ public class Speedster extends NonActivatablePowerHero {
 			j = 0;
 		if (j == 7)
 			j = 1;
-		helperMove(oldI, oldJ, i, j);
+		helperMove(oldI, oldJ, i, j, Direction.DOWNRIGHT);
 	}
 
-	public void moveLeft() {
+	public void moveLeft() throws OccupiedCellException {
 		int oldI = getPosI();
 		int oldJ = getPosJ();
 		int i = getPosI();
@@ -109,10 +114,10 @@ public class Speedster extends NonActivatablePowerHero {
 		if (j == -2)
 			j = 4;
 		
-		helperMove(oldI, oldJ, i, j);
+		helperMove(oldI, oldJ, i, j, Direction.LEFT);
 	}
 	
-	public void moveRight() {
+	public void moveRight() throws OccupiedCellException {
 		int oldI = getPosI();
 		int oldJ = getPosJ();
 		int i = getPosI();
@@ -122,10 +127,10 @@ public class Speedster extends NonActivatablePowerHero {
 			j = 0;
 		if (j == 7)
 			j = 1;
-		helperMove(oldI, oldJ, i, j);
+		helperMove(oldI, oldJ, i, j, Direction.RIGHT);
 	}
 	
-	public void moveUp() {
+	public void moveUp() throws OccupiedCellException {
 		int oldI = getPosI();
 		int oldJ = getPosJ();
 		int i = getPosI();
@@ -135,10 +140,10 @@ public class Speedster extends NonActivatablePowerHero {
 			i = 6;
 		if (i == -2)
 			i = 5;
-		helperMove(oldI, oldJ, i, j);
+		helperMove(oldI, oldJ, i, j, Direction.UP);
 	}
 	
-	public void moveUpLeft() {
+	public void moveUpLeft() throws OccupiedCellException {
 		int oldI = getPosI();
 		int oldJ = getPosJ();
 		int i = getPosI();
@@ -153,10 +158,10 @@ public class Speedster extends NonActivatablePowerHero {
 			j = 5;
 		if (j == -2)
 			j = 4;
-		helperMove(oldI, oldJ, i, j);
+		helperMove(oldI, oldJ, i, j, Direction.UPLEFT);
 	}
 	
-	public void moveUpRight() {
+	public void moveUpRight() throws OccupiedCellException {
 		int oldI = getPosI();
 		int oldJ = getPosJ();
 		int i = getPosI();
@@ -171,7 +176,7 @@ public class Speedster extends NonActivatablePowerHero {
 			j = 0;
 		if (j == 7)
 			j = 1;
-		helperMove(oldI, oldJ, i, j);
+		helperMove(oldI, oldJ, i, j, Direction.UPRIGHT);
 	}
 
 	@Override

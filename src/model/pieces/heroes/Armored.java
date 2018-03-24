@@ -1,5 +1,8 @@
 package model.pieces.heroes;
 
+import exceptions.OccupiedCellException;
+import exceptions.UnallowedMovementException;
+import exceptions.WrongTurnException;
 import model.game.Direction;
 import model.game.Game;
 import model.game.Player;
@@ -22,7 +25,9 @@ public class Armored extends NonActivatablePowerHero {
 	}
     
 	@Override
-	public void move(Direction r) {
+	public void move(Direction r) throws WrongTurnException, UnallowedMovementException, OccupiedCellException {
+		if(this.getOwner() != getGame().getCurrentPlayer())
+			throw new WrongTurnException("That is not your turn", this);
 		switch(r) {
 		case DOWN : moveDown(); break;
 		case DOWNLEFT : moveDownLeft(); break;
@@ -32,7 +37,7 @@ public class Armored extends NonActivatablePowerHero {
 		case UP : moveUp(); break;
 		case UPLEFT : moveUpLeft(); break;
 		case UPRIGHT : moveUpRight(); break;
-		default : break;//throw Exception 
+		default : throw new UnallowedMovementException("This move is unallowed", this, r);
 		}
 		
 	}
