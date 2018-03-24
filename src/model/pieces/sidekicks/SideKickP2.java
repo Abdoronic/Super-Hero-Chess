@@ -24,7 +24,6 @@ public class SideKickP2 extends SideKick {
 		case RIGHT : moveRight(); break;
 		default : throw new UnallowedMovementException("This move is unallowed", this, r);
 		}
-		
 	}
 
 }

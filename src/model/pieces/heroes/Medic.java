@@ -39,24 +39,6 @@ public class Medic extends ActivatablePowerHero {
 		default:
 			throw new UnallowedMovementException("This move is unallowed", this, r);
 		}
-
-	}
-
-	public Piece createHero(Piece target) {
-		Piece p = null;
-		if (target instanceof Armored)
-			p = new Armored(target.getOwner(), getGame(), (target.getOwner() == getGame().getPlayer1()) ? "A1" : "A2");
-		else if (target instanceof Medic)
-			p = new Medic(target.getOwner(), getGame(), (target.getOwner() == getGame().getPlayer1()) ? "M1" : "M2");
-		else if (target instanceof Ranged)
-			p = new Ranged(target.getOwner(), getGame(), (target.getOwner() == getGame().getPlayer1()) ? "R1" : "R2");
-		else if (target instanceof Super)
-			p = new Super(target.getOwner(), getGame(), (target.getOwner() == getGame().getPlayer1()) ? "P1" : "P2");
-		else if (target instanceof Speedster)
-			p = new Speedster(target.getOwner(), getGame(), (target.getOwner() == getGame().getPlayer1()) ? "S1" : "S2");
-		else if (target instanceof Tech)
-			p = new Tech(target.getOwner(), getGame(), (target.getOwner() == getGame().getPlayer1()) ? "T1" : "T2");
-		return p;
 	}
 
 	public void usePower(Direction d, Piece target, Point newPos) throws WrongTurnException, PowerAlreadyUsedException, InvalidPowerTargetException {
@@ -73,6 +55,7 @@ public class Medic extends ActivatablePowerHero {
 		boolean f = false;
 		for (int k = 0; k < tmp.size(); k++) {
 			if (target == tmp.get(k)) {
+				tmp.remove(k);
 				f = true;
 				break;
 			}
@@ -126,14 +109,17 @@ public class Medic extends ActivatablePowerHero {
 				j = 0;
 		}
 		if (getGame().getCellAt(i, j).getPiece() == null) {
-			getGame().getCellAt(i, j).setPiece(createHero(target));
+			getGame().getCellAt(i, j).setPiece(target);
+			if(target instanceof ActivatablePowerHero)
+				((ActivatablePowerHero) target).setPowerUsed(false);
+			if(target instanceof Armored)
+				((Armored) target).setArmorUp(true);
 			getGame().getCellAt(i, j).getPiece().setPosI(i);
 			getGame().getCellAt(i, j).getPiece().setPosJ(j);
 		} else
 			throw new InvalidPowerTargetException("You can not revive here, it is an occupied cell", this, target);
 		setPowerUsed(true);
 		getGame().switchTurns();
-
 	}
 
 	@Override
