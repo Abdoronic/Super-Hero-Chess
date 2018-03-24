@@ -2,7 +2,6 @@ package model.pieces.heroes;
 
 import java.awt.Point;
 
-import exceptions.InvalidPowerDirectionException;
 import exceptions.InvalidPowerTargetException;
 import exceptions.OccupiedCellException;
 import exceptions.PowerAlreadyUsedException;
@@ -89,7 +88,8 @@ public class Tech extends ActivatablePowerHero {
 					throw new InvalidPowerTargetException("Already has Armor", this, target);
 			}
 		}
-
+		setPowerUsed(true);
+		getGame().switchTurns();
 	}
 
 	@Override

@@ -90,7 +90,8 @@ public class Medic extends ActivatablePowerHero {
 			if (j == -1)
 				j = 5;
 		} else if (d == Direction.RIGHT) {
-			if (j + 1 == 6)
+			j++;
+			if (j == 6)
 				j = 0;
 		} else if (d == Direction.UP) {
 			i--;

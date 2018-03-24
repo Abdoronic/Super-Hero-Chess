@@ -28,6 +28,7 @@ public class Game {
 		this.player2 = player2;
 		currentPlayer = player1;
 		board = new Cell[boardHeight][boardWidth];
+		assemblePieces();
 	}
 	
 	public void assemblePieces() {
