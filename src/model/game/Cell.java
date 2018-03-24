@@ -3,10 +3,11 @@ package model.game;
 import model.pieces.Piece;
 
 public class Cell {
-	Piece piece;
+
+	private Piece piece;
 
 	public Cell() {
-
+		this.piece = null;
 	}
 
 	public Cell(Piece piece) {
@@ -19,5 +20,12 @@ public class Cell {
 
 	public void setPiece(Piece piece) {
 		this.piece = piece;
+	}
+	@Override
+	public String toString() {
+		if(piece != null)
+			return piece.toString();
+		
+		return "n";
 	}
 }

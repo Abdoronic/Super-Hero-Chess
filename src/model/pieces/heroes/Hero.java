@@ -6,11 +6,8 @@ import model.pieces.Piece;
 
 public abstract class Hero extends Piece {
 
-	public Hero() {
-
-	}
-
 	public Hero(Player player, Game game, String name) {
 		super(player, game, name);
 	}
+
 }
