@@ -24,6 +24,7 @@ public abstract class Piece implements Movable {
 	public void attack(Piece target) {
 		Player attacked = target.getOwner();
 		Player attacker = game.getCurrentPlayer();
+		boolean wasArmored = false;
 		if (target instanceof SideKick) {
 			attacker.setSideKilled(attacker.getSideKilled() + 1);
 			if (attacker.getSideKilled() % 2 == 0)
@@ -31,12 +32,14 @@ public abstract class Piece implements Movable {
 			game.getCellAt(target.getPosI(), target.getPosJ()).setPiece(null);
 		} else if (target instanceof Armored && ((Armored) target).isArmorUp()) {
 			((Armored) target).setArmorUp(false);
+			wasArmored = true;
 		} else {
 			attacked.getDeadCharacters().add(target);
 			attacker.setPayloadPos(attacker.getPayloadPos() + 1);
 			game.getCellAt(target.getPosI(), target.getPosJ()).setPiece(null);
 		}
-		game.checkWinner();
+		if(!wasArmored)
+			game.checkWinner();
 	}
 
 	private void helperMove(int oldI, int oldJ, int i, int j, Direction r) throws OccupiedCellException {

@@ -89,7 +89,6 @@ public class Tech extends ActivatablePowerHero {
 			}
 		}
 		setPowerUsed(true);
-		getGame().switchTurns();
 	}
 
 	@Override

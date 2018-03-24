@@ -53,8 +53,7 @@ public class Medic extends ActivatablePowerHero {
 		else if (target instanceof Super)
 			p = new Super(target.getOwner(), getGame(), (target.getOwner() == getGame().getPlayer1()) ? "P1" : "P2");
 		else if (target instanceof Speedster)
-			p = new Speedster(target.getOwner(), getGame(),
-					(target.getOwner() == getGame().getPlayer1()) ? "S1" : "S2");
+			p = new Speedster(target.getOwner(), getGame(), (target.getOwner() == getGame().getPlayer1()) ? "S1" : "S2");
 		else if (target instanceof Tech)
 			p = new Tech(target.getOwner(), getGame(), (target.getOwner() == getGame().getPlayer1()) ? "T1" : "T2");
 		return p;
