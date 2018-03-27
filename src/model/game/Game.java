@@ -128,7 +128,7 @@ public class Game {
 		for (int i = 0; i < board[0].length; i++)
 			System.out.print("--");
 		System.out.println("|");
-		System.out.println("    " + getPlayer1().getName());
+		System.out.println("      " + getPlayer1().getName());
 		return s;
 	}
 
