@@ -106,6 +106,14 @@ public class Game {
 		return payloadPosTarget;
 	}
 
+	public int getBoardWidth() {
+		return boardWidth;
+	}
+	
+	public int getBoardHeight() {
+		return boardHeight;
+	}
+	
 	@Override
 	public String toString() {
 		String s = "";
@@ -131,13 +139,4 @@ public class Game {
 		System.out.println("      " + getPlayer1().getName());
 		return s;
 	}
-
-	public int getBoardWidth() {
-		return boardWidth;
-	}
-
-	public int getBoardHeight() {
-		return boardHeight;
-	}
-
 }

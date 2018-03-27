@@ -20,25 +20,8 @@ public class Tech extends ActivatablePowerHero {
 
 	@Override
 	public void move(Direction r) throws WrongTurnException, UnallowedMovementException, OccupiedCellException {
-		if (this.getOwner() != getGame().getCurrentPlayer())
-			throw new WrongTurnException("That is not your turn", this);
-		switch (r) {
-		case DOWNLEFT:
-			moveDownLeft();
-			break;
-		case DOWNRIGHT:
-			moveDownRight();
-			break;
-		case UPLEFT:
-			moveUpLeft();
-			break;
-		case UPRIGHT:
-			moveUpRight();
-			break;
-		default:
-			throw new UnallowedMovementException("This move is unallowed", this, r);
-		}
-
+		Direction[] allowedMoves = { Direction.DOWNLEFT, Direction.DOWNRIGHT, Direction.UPLEFT, Direction.UPRIGHT };
+		move(1, r, allowedMoves);
 	}
 
 	@Override

@@ -26,22 +26,10 @@ public class Armored extends NonActivatablePowerHero {
     
 	@Override
 	public void move(Direction r) throws WrongTurnException, UnallowedMovementException, OccupiedCellException {
-		if(this.getOwner() != getGame().getCurrentPlayer())
-			throw new WrongTurnException("That is not your turn", this);
-		switch(r) {
-		case DOWN : moveDown(); break;
-		case DOWNLEFT : moveDownLeft(); break;
-		case DOWNRIGHT : moveDownRight(); break;
-		case LEFT : moveLeft(); break;
-		case RIGHT : moveRight(); break;
-		case UP : moveUp(); break;
-		case UPLEFT : moveUpLeft(); break;
-		case UPRIGHT : moveUpRight(); break;
-		default : throw new UnallowedMovementException("This move is unallowed", this, r);
-		}
-		
+		Direction[] allowedMoves = { Direction.DOWN, Direction.DOWNLEFT, Direction.DOWNRIGHT, Direction.LEFT,
+				Direction.RIGHT, Direction.UP, Direction.UPLEFT, Direction.UPRIGHT };
+		move(1, r, allowedMoves);
 	}
-
 	
 	@Override
 	public String toString() {
