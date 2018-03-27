@@ -29,5 +29,4 @@ public abstract class ActivatablePowerHero extends Hero {
 	public void setPowerUsed(boolean powerUsed) {
 		this.powerUsed = powerUsed;
 	}
-
 }

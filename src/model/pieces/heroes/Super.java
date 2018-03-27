@@ -62,5 +62,4 @@ public class Super extends ActivatablePowerHero {
 	public String toString() {
 		return "P";
 	}
-
 }

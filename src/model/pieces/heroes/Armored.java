@@ -35,5 +35,4 @@ public class Armored extends NonActivatablePowerHero {
 	public String toString() {
 		return "A";
 	}
-
 }

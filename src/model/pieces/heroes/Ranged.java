@@ -76,5 +76,4 @@ public class Ranged extends ActivatablePowerHero {
 	public String toString() {
 		return "R";
 	}
-
 }

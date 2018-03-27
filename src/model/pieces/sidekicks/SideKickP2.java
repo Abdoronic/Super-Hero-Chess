@@ -18,5 +18,4 @@ public class SideKickP2 extends SideKick {
 				Direction.RIGHT };
 		move(1, r, allowedMoves);
 	}
-
 }

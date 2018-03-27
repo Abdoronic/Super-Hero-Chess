@@ -78,5 +78,4 @@ public class Tech extends ActivatablePowerHero {
 	public String toString() {
 		return "T";
 	}
-
 }

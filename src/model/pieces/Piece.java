@@ -150,5 +150,4 @@ public abstract class Piece implements Movable {
 	public Player getOwner() {
 		return owner;
 	}
-
 }
