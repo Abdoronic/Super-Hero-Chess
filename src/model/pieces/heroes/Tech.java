@@ -34,7 +34,7 @@ public class Tech extends ActivatablePowerHero {
 		if (newPos != null) {
 			if (!isFriendly(target))
 				throw new InvalidPowerTargetException("You can't teleport an enemy", this, target);
-			if (getGame().getCellAt(newPos.x, newPos.y).getPiece() == null) {
+			if (isEmptyCell(newPos.x, newPos.y)) {
 				getGame().getCellAt(newPos.x, newPos.y).setPiece(target);
 				int oldI = target.getPosI();
 				int oldJ = target.getPosJ();

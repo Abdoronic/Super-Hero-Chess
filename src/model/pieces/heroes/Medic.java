@@ -34,11 +34,11 @@ public class Medic extends ActivatablePowerHero {
 		int j = this.getPosJ();
 		if (!isFriendly(target))
 			throw new InvalidPowerTargetException("You can not revive an enemy", this, target);
-		ArrayList<Piece> tmp = this.getOwner().getDeadCharacters();
+		ArrayList<Piece> deadHeroes = this.getOwner().getDeadCharacters();
 		boolean dead = false;
-		for (int k = 0; k < tmp.size(); k++)
-			if (target == tmp.get(k)) {
-				tmp.remove(k);
+		for (int k = 0; k < deadHeroes.size(); k++)
+			if (target == deadHeroes.get(k)) {
+				deadHeroes.remove(k);
 				dead = true;
 				break;
 			}
