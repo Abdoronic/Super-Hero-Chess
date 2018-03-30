@@ -32,7 +32,7 @@ public class Medic extends ActivatablePowerHero {
 			throw new PowerAlreadyUsedException("This power has been already used", this);
 		int i = this.getPosI();
 		int j = this.getPosJ();
-		if (target.getOwner() != this.getOwner())
+		if (!isFriendly(target))
 			throw new InvalidPowerTargetException("You can not revive an enemy", this, target);
 		ArrayList<Piece> tmp = this.getOwner().getDeadCharacters();
 		boolean dead = false;
@@ -47,7 +47,7 @@ public class Medic extends ActivatablePowerHero {
 		Point p = getMoveLocation(i, j, 1, d, true);
 		i = p.x;
 		j = p.y;
-		if (getGame().getCellAt(i, j).getPiece() == null) {
+		if (isEmptyCell(i, j)) {
 			getGame().getCellAt(i, j).setPiece(target);
 			if(target instanceof ActivatablePowerHero)
 				((ActivatablePowerHero) target).setPowerUsed(false);

@@ -104,12 +104,12 @@ public abstract class Piece implements Movable {
 	}
 
 	public void doMove(int oldI, int oldJ, int i, int j, Direction r) throws OccupiedCellException {
-		if (game.getCellAt(i, j).getPiece() == null) {
+		if (isEmptyCell(i, j)) {
 			game.getCellAt(i, j).setPiece(this);
 			game.getCellAt(oldI, oldJ).setPiece(null);
 			this.setPosI(i);
 			this.setPosJ(j);
-		} else if (game.getCellAt(i, j).getPiece().getOwner() == this.getOwner()) {
+		} else if (isFriendly(i, j)) {
 			throw new OccupiedCellException("This an Occupied Cell by a friendly", this, r);
 		} else {
 			attack(game.getCellAt(i, j).getPiece());
@@ -121,6 +121,18 @@ public abstract class Piece implements Movable {
 			}
 		}
 		game.switchTurns();
+	}
+	
+	public boolean isEmptyCell(int i, int j) {
+		return game.getCellAt(i, j).getPiece() == null;
+	}
+	
+	public boolean isFriendly(Piece p) {
+		return owner == p.owner;
+	}
+	
+	public boolean isFriendly(int i, int j) {
+		return owner == game.getCellAt(i, j).getPiece().owner;
 	}
 
 	public String getName() {

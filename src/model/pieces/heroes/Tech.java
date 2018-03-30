@@ -32,7 +32,7 @@ public class Tech extends ActivatablePowerHero {
 		if (this.isPowerUsed())
 			throw new PowerAlreadyUsedException("This power has been already used", this);
 		if (newPos != null) {
-			if (this.getOwner() != target.getOwner())
+			if (!isFriendly(target))
 				throw new InvalidPowerTargetException("You can't teleport an enemy", this, target);
 			if (getGame().getCellAt(newPos.x, newPos.y).getPiece() == null) {
 				getGame().getCellAt(newPos.x, newPos.y).setPiece(target);
@@ -44,7 +44,7 @@ public class Tech extends ActivatablePowerHero {
 			} else {
 				throw new InvalidPowerTargetException("This cell is Occuiped you can't teleport", this, target);
 			}
-		} else if (target.getOwner() != this.getOwner()) {
+		} else if (!isFriendly(target)) {
 			if (target instanceof ActivatablePowerHero) {
 				if (((ActivatablePowerHero) target).isPowerUsed() == false)
 					((ActivatablePowerHero) target).setPowerUsed(true);
