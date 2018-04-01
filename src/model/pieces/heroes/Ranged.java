@@ -3,6 +3,7 @@ package model.pieces.heroes;
 import java.awt.Point;
 
 import exceptions.InvalidPowerDirectionException;
+import exceptions.InvalidPowerTargetException;
 import exceptions.OccupiedCellException;
 import exceptions.PowerAlreadyUsedException;
 import exceptions.UnallowedMovementException;
@@ -25,11 +26,8 @@ public class Ranged extends ActivatablePowerHero {
 		move(1, r, allowedMoves);
 	}
 
-	public void usePower(Direction d, Piece target, Point newPos) throws WrongTurnException, PowerAlreadyUsedException, InvalidPowerDirectionException {
-		if (this.getOwner() != getGame().getCurrentPlayer())
-			throw new WrongTurnException("That is not your turn", this);
-		if(this.isPowerUsed())
-			throw new PowerAlreadyUsedException("This power has been already used", this);
+	public void usePower(Direction d, Piece target, Point newPos) throws WrongTurnException, PowerAlreadyUsedException, InvalidPowerDirectionException, InvalidPowerTargetException {
+		super.usePower(d, target, newPos);
 		int i = this.getPosI();
 		int j = this.getPosJ();
 		Piece p = null;
