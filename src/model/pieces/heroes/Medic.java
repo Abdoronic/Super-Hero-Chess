@@ -3,6 +3,7 @@ package model.pieces.heroes;
 import java.awt.Point;
 import java.util.ArrayList;
 
+import exceptions.InvalidPowerDirectionException;
 import exceptions.InvalidPowerTargetException;
 import exceptions.OccupiedCellException;
 import exceptions.PowerAlreadyUsedException;
@@ -21,119 +22,41 @@ public class Medic extends ActivatablePowerHero {
 
 	@Override
 	public void move(Direction r) throws WrongTurnException, UnallowedMovementException, OccupiedCellException {
-		if (this.getOwner() != getGame().getCurrentPlayer())
-			throw new WrongTurnException("That is not your turn", this);
-		switch (r) {
-		case DOWN:
-			moveDown();
-			break;
-		case LEFT:
-			moveLeft();
-			break;
-		case RIGHT:
-			moveRight();
-			break;
-		case UP:
-			moveUp();
-			break;
-		default:
-			throw new UnallowedMovementException("This move is unallowed", this, r);
-		}
-
+		Direction[] allowedMoves = { Direction.DOWN, Direction.LEFT, Direction.RIGHT, Direction.UP };
+		move(1, r, allowedMoves);
 	}
 
-	public Piece createHero(Piece target) {
-		Piece p = null;
-		if (target instanceof Armored)
-			p = new Armored(target.getOwner(), getGame(), (target.getOwner() == getGame().getPlayer1()) ? "A1" : "A2");
-		else if (target instanceof Medic)
-			p = new Medic(target.getOwner(), getGame(), (target.getOwner() == getGame().getPlayer1()) ? "M1" : "M2");
-		else if (target instanceof Ranged)
-			p = new Ranged(target.getOwner(), getGame(), (target.getOwner() == getGame().getPlayer1()) ? "R1" : "R2");
-		else if (target instanceof Super)
-			p = new Super(target.getOwner(), getGame(), (target.getOwner() == getGame().getPlayer1()) ? "P1" : "P2");
-		else if (target instanceof Speedster)
-			p = new Speedster(target.getOwner(), getGame(),
-					(target.getOwner() == getGame().getPlayer1()) ? "S1" : "S2");
-		else if (target instanceof Tech)
-			p = new Tech(target.getOwner(), getGame(), (target.getOwner() == getGame().getPlayer1()) ? "T1" : "T2");
-		return p;
-	}
-
-	public void usePower(Direction d, Piece target, Point newPos) throws WrongTurnException, PowerAlreadyUsedException, InvalidPowerTargetException {
-		if (this.getOwner() != getGame().getCurrentPlayer())
-			throw new WrongTurnException("That is not your turn", this);
-		if(this.isPowerUsed())
-			throw new PowerAlreadyUsedException("This power has been already used", this);
+	public void usePower(Direction d, Piece target, Point newPos) throws WrongTurnException, PowerAlreadyUsedException, InvalidPowerTargetException, InvalidPowerDirectionException {
+		super.usePower(d, target, newPos);
 		int i = this.getPosI();
 		int j = this.getPosJ();
-		if (target.getOwner() != this.getOwner()) {
+		if (!isFriendly(target))
 			throw new InvalidPowerTargetException("You can not revive an enemy", this, target);
-		}
-		ArrayList<Piece> tmp = this.getOwner().getDeadCharacters();
-		boolean f = false;
-		for (int k = 0; k < tmp.size(); k++) {
-			if (target == tmp.get(k)) {
-				f = true;
+		ArrayList<Piece> deadHeroes = this.getOwner().getDeadCharacters();
+		boolean dead = false;
+		for (int k = 0; k < deadHeroes.size(); k++)
+			if (target == deadHeroes.get(k)) {
+				deadHeroes.remove(k);
+				dead = true;
 				break;
 			}
-		}
-		if (!f) {
+		if (!dead)
 			throw new InvalidPowerTargetException("You can not revive an alive friend", this, target);
-		}
-		if (d == Direction.DOWN) {
-			i++;
-			if (i == 7)
-				i = 0;
-		} else if (d == Direction.LEFT) {
-			j--;
-			if (j == -1)
-				j = 5;
-		} else if (d == Direction.RIGHT) {
-			if (j + 1 == 6)
-				j = 0;
-		} else if (d == Direction.UP) {
-			i--;
-			if (i == -1)
-				i = 6;
-		} else if (d == Direction.UPRIGHT) {
-			i--;
-			j++;
-			if (i == -1)
-				i = 6;
-			if (j == 6)
-				j = 0;
-		} else if (d == Direction.UPLEFT) {
-			i--;
-			j--;
-			if (i == -1)
-				i = 6;
-			if (j == -1)
-				j = 5;
-		} else if (d == Direction.DOWNLEFT) {
-			i++;
-			j--;
-			if (i == 7)
-				i = 0;
-			if (j == -1)
-				j = 5;
-		} else if (d == Direction.DOWNRIGHT) {
-			i++;
-			j++;
-			if (i == 7)
-				i = 0;
-			if (j == 6)
-				j = 0;
-		}
-		if (getGame().getCellAt(i, j).getPiece() == null) {
-			getGame().getCellAt(i, j).setPiece(createHero(target));
+		Point p = getMoveLocation(i, j, 1, d, true);
+		i = p.x;
+		j = p.y;
+		if (isEmptyCell(i, j)) {
+			getGame().getCellAt(i, j).setPiece(target);
+			if(target instanceof ActivatablePowerHero)
+				((ActivatablePowerHero) target).setPowerUsed(false);
+			if(target instanceof Armored)
+				((Armored) target).setArmorUp(true);
 			getGame().getCellAt(i, j).getPiece().setPosI(i);
 			getGame().getCellAt(i, j).getPiece().setPosJ(j);
 		} else
 			throw new InvalidPowerTargetException("You can not revive here, it is an occupied cell", this, target);
 		setPowerUsed(true);
 		getGame().switchTurns();
-
 	}
 
 	@Override

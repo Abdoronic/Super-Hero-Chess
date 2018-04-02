@@ -19,8 +19,12 @@ public abstract class ActivatablePowerHero extends Hero {
 		super(player, game, name);
 	}
 
-	public abstract void usePower(Direction d, Piece target, Point newPos) throws WrongTurnException,
-			PowerAlreadyUsedException, InvalidPowerTargetException, InvalidPowerDirectionException;
+	public void usePower(Direction d, Piece target, Point newPos) throws WrongTurnException, PowerAlreadyUsedException, InvalidPowerTargetException, InvalidPowerDirectionException {
+		if (this.getOwner() != getGame().getCurrentPlayer())
+			throw new WrongTurnException("That is not your turn", this);
+		if(this.isPowerUsed())
+			throw new PowerAlreadyUsedException("This power has been already used", this);
+	}
 
 	public boolean isPowerUsed() {
 		return powerUsed;
@@ -29,5 +33,4 @@ public abstract class ActivatablePowerHero extends Hero {
 	public void setPowerUsed(boolean powerUsed) {
 		this.powerUsed = powerUsed;
 	}
-
 }

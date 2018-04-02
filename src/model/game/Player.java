@@ -39,5 +39,4 @@ public class Player {
 	public ArrayList<Piece> getDeadCharacters() {
 		return deadCharacters;
 	}
-
 }

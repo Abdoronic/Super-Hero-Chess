@@ -1,6 +1,10 @@
 package model.pieces;
 
+import java.awt.Point;
+
 import exceptions.OccupiedCellException;
+import exceptions.UnallowedMovementException;
+import exceptions.WrongTurnException;
 import model.game.Direction;
 import model.game.Game;
 import model.game.Player;
@@ -23,7 +27,8 @@ public abstract class Piece implements Movable {
 
 	public void attack(Piece target) {
 		Player attacked = target.getOwner();
-		Player attacker = game.getCurrentPlayer();
+		Player attacker = owner;
+		boolean wasArmored = false;
 		if (target instanceof SideKick) {
 			attacker.setSideKilled(attacker.getSideKilled() + 1);
 			if (attacker.getSideKilled() % 2 == 0)
@@ -31,21 +36,80 @@ public abstract class Piece implements Movable {
 			game.getCellAt(target.getPosI(), target.getPosJ()).setPiece(null);
 		} else if (target instanceof Armored && ((Armored) target).isArmorUp()) {
 			((Armored) target).setArmorUp(false);
+			wasArmored = true;
 		} else {
 			attacked.getDeadCharacters().add(target);
 			attacker.setPayloadPos(attacker.getPayloadPos() + 1);
 			game.getCellAt(target.getPosI(), target.getPosJ()).setPiece(null);
 		}
-		game.checkWinner();
+		if(!wasArmored)
+			game.checkWinner();
+	}
+	
+	public void move(int step, Direction r, Direction[] allowedMoves) throws UnallowedMovementException, OccupiedCellException, WrongTurnException {
+		if (this.getOwner() != getGame().getCurrentPlayer())
+			throw new WrongTurnException("That is not your turn", this);
+		boolean allowed = false;
+		for(Direction d : allowedMoves)
+			if(r == d)
+				allowed = true;
+		if(!allowed)
+			throw new UnallowedMovementException("This move is unallowed", this, r);
+		int oldI = getPosI();
+		int oldJ = getPosJ();
+		Point moveLocation = getMoveLocation(oldI, oldJ, step, r, true);
+		int newI = moveLocation.x;
+		int newJ = moveLocation.y;
+		doMove(oldI, oldJ, newI, newJ, r);
+	}
+	
+	public Point getMoveLocation(int i, int j, int step, Direction r, boolean wrap) {
+		switch (r) {
+		case DOWN:
+			i += step;
+			break;
+		case DOWNLEFT:
+			i += step;
+			j -= step;
+			break;
+		case DOWNRIGHT:
+			i += step;
+			j += step;
+			break;
+		case LEFT:
+			j -= step;
+			break;
+		case RIGHT:
+			j += step;
+			break;
+		case UP:
+			i -= step;
+			break;
+		case UPLEFT:
+			i -= step;
+			j -= step;
+			break;
+		case UPRIGHT:
+			i -= step;
+			j += step;
+			break;
+		}
+		int h = getGame().getBoardHeight();
+		int w = getGame().getBoardWidth();
+		if(i < 0 && wrap) i += h;
+		if(j < 0 && wrap) j += w;
+		if(i >= h && wrap) i -= h;
+		if(j >= w && wrap) j -= w;
+		return new Point(i, j);
 	}
 
-	private void helperMove(int oldI, int oldJ, int i, int j, Direction r) throws OccupiedCellException {
-		if (game.getCellAt(i, j).getPiece() == null) {
+	public void doMove(int oldI, int oldJ, int i, int j, Direction r) throws OccupiedCellException {
+		if (isEmptyCell(i, j)) {
 			game.getCellAt(i, j).setPiece(this);
 			game.getCellAt(oldI, oldJ).setPiece(null);
 			this.setPosI(i);
 			this.setPosJ(j);
-		} else if (game.getCellAt(i, j).getPiece().getOwner() == this.getOwner()) {
+		} else if (isFriendly(i, j)) {
 			throw new OccupiedCellException("This an Occupied Cell by a friendly", this, r);
 		} else {
 			attack(game.getCellAt(i, j).getPiece());
@@ -58,107 +122,19 @@ public abstract class Piece implements Movable {
 		}
 		game.switchTurns();
 	}
-
-	public void moveDown() throws OccupiedCellException {
-		int oldI = getPosI();
-		int oldJ = getPosJ();
-		int i = getPosI();
-		int j = getPosJ();
-		i++;
-		if (i == 7)
-			i = 0;
-		helperMove(oldI, oldJ, i, j, Direction.DOWN);
+	
+	public boolean isEmptyCell(int i, int j) {
+		return game.getCellAt(i, j).getPiece() == null;
 	}
-
-	public void moveDownLeft() throws OccupiedCellException {
-		int oldI = getPosI();
-		int oldJ = getPosJ();
-		int i = getPosI();
-		int j = getPosJ();
-		i++;
-		j--;
-		if (i == 7)
-			i = 0;
-		if (j == -1)
-			j = 5;
-		helperMove(oldI, oldJ, i, j, Direction.DOWNLEFT);
+	
+	public boolean isFriendly(Piece p) {
+		return owner == p.owner;
+	}
+	
+	public boolean isFriendly(int i, int j) {
+		return owner == game.getCellAt(i, j).getPiece().owner;
 	}
 
-	public void moveDownRight() throws OccupiedCellException {
-		int oldI = getPosI();
-		int oldJ = getPosJ();
-		int i = getPosI();
-		int j = getPosJ();
-		i++;
-		j++;
-		if (i == 7)
-			i = 0;
-		if (j == 6)
-			j = 0;
-		helperMove(oldI, oldJ, i, j, Direction.DOWNRIGHT);
-	}
-
-	public void moveLeft() throws OccupiedCellException {
-		int oldI = getPosI();
-		int oldJ = getPosJ();
-		int i = getPosI();
-		int j = getPosJ();
-		j--;
-		if (j == -1)
-			j = 5;
-		helperMove(oldI, oldJ, i, j, Direction.LEFT);
-	}
-	
-	public void moveRight() throws OccupiedCellException {
-		int oldI = getPosI();
-		int oldJ = getPosJ();
-		int i = getPosI();
-		int j = getPosJ();
-		j++;
-		if (j == 6)
-			j = 0;
-		helperMove(oldI, oldJ, i, j, Direction.RIGHT);
-	}
-	
-	public void moveUp() throws OccupiedCellException {
-		int oldI = getPosI();
-		int oldJ = getPosJ();
-		int i = getPosI();
-		int j = getPosJ();
-		i--;
-		if (i == -1)
-			i = 6;
-		helperMove(oldI, oldJ, i, j, Direction.UP);
-	}
-	
-	public void moveUpLeft() throws OccupiedCellException {
-		int oldI = getPosI();
-		int oldJ = getPosJ();
-		int i = getPosI();
-		int j = getPosJ();
-		i--;
-		j--;
-		if (i == -1)
-			i = 6;
-		if (j == -1)
-			j = 5;
-		helperMove(oldI, oldJ, i, j, Direction.UPLEFT);
-	}
-	
-	public void moveUpRight() throws OccupiedCellException {
-		int oldI = getPosI();
-		int oldJ = getPosJ();
-		int i = getPosI();
-		int j = getPosJ();
-		i--;
-		j++;
-		if (i == -1)
-			i = 6;
-		if (j == 6)
-			j = 0;
-		helperMove(oldI, oldJ, i, j, Direction.UPRIGHT);
-	}
-	
 	public String getName() {
 		return name;
 	}
@@ -186,5 +162,4 @@ public abstract class Piece implements Movable {
 	public Player getOwner() {
 		return owner;
 	}
-
 }

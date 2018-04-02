@@ -3,6 +3,7 @@ package model.pieces.heroes;
 import java.awt.Point;
 
 import exceptions.InvalidPowerDirectionException;
+import exceptions.InvalidPowerTargetException;
 import exceptions.OccupiedCellException;
 import exceptions.PowerAlreadyUsedException;
 import exceptions.UnallowedMovementException;
@@ -20,67 +21,36 @@ public class Ranged extends ActivatablePowerHero {
 
 	@Override
 	public void move(Direction r) throws WrongTurnException, UnallowedMovementException, OccupiedCellException {
-		if (this.getOwner() != getGame().getCurrentPlayer())
-			throw new WrongTurnException("That is not your turn", this);
-		switch (r) {
-		case DOWN:
-			moveDown();
-			break;
-		case DOWNLEFT:
-			moveDownLeft();
-			break;
-		case DOWNRIGHT:
-			moveDownRight();
-			break;
-		case LEFT:
-			moveLeft();
-			break;
-		case RIGHT:
-			moveRight();
-			break;
-		case UP:
-			moveUp();
-			break;
-		case UPLEFT:
-			moveUpLeft();
-			break;
-		case UPRIGHT:
-			moveUpRight();
-			break;
-		default:
-			throw new UnallowedMovementException("This move is unallowed", this, r);
-		}
-
+		Direction[] allowedMoves = { Direction.DOWN, Direction.DOWNLEFT, Direction.DOWNRIGHT, Direction.LEFT,
+				Direction.RIGHT, Direction.UP, Direction.UPLEFT, Direction.UPRIGHT };
+		move(1, r, allowedMoves);
 	}
 
-	public void usePower(Direction d, Piece target, Point newPos) throws WrongTurnException, PowerAlreadyUsedException, InvalidPowerDirectionException {
-		if (this.getOwner() != getGame().getCurrentPlayer())
-			throw new WrongTurnException("That is not your turn", this);
-		if(this.isPowerUsed())
-			throw new PowerAlreadyUsedException("This power has been already used", this);
+	public void usePower(Direction d, Piece target, Point newPos) throws WrongTurnException, PowerAlreadyUsedException, InvalidPowerDirectionException, InvalidPowerTargetException {
+		super.usePower(d, target, newPos);
 		int i = this.getPosI();
 		int j = this.getPosJ();
 		Piece p = null;
 		if (d == Direction.DOWN) {
-			for (int k = i; k < 7; k++) {
+			for (int k = i+1; k < 7; k++) {
 				p = getGame().getCellAt(k, j).getPiece();
 				if (p != null)
 					break;
 			}
 		} else if (d == Direction.UP) {
-			for (int k = i; k > -1; k--) {
+			for (int k = i-1; k > -1; k--) {
 				p = getGame().getCellAt(k, j).getPiece();
 				if (p != null)
 					break;
 			}
 		} else if (d == Direction.LEFT) {
-			for (int k = j; k > -1; k--) {
+			for (int k = j-1; k > -1; k--) {
 				p = getGame().getCellAt(i, k).getPiece();
 				if (p != null)
 					break;
 			}
 		} else if (d == Direction.RIGHT) {
-			for (int k = j; k < 6; k++) {
+			for (int k = j+1; k < 6; k++) {
 				p = getGame().getCellAt(i, k).getPiece();
 				if (p != null)
 					break;
@@ -89,18 +59,19 @@ public class Ranged extends ActivatablePowerHero {
 			throw new InvalidPowerDirectionException("You can't attack diagnoally", this, d);
 		}
 		if (p == null) {
-			new InvalidPowerDirectionException("You can't attack Empty cells", this, d);
-		} else if (p.getOwner() == this.getOwner()) {
-			throw new InvalidPowerDirectionException("You can't attack a friend", this, d);
+			throw new InvalidPowerDirectionException("You can't attack Empty cells", this, d);
 		} else {
-			attack(p);
-			getGame().switchTurns();
+			if (p.getOwner() == this.getOwner()) {
+				throw new InvalidPowerDirectionException("You can't attack a friend", this, d);
+			} else {
+				attack(p);
+				setPowerUsed(true);
+				getGame().switchTurns();
+			}
 		}
-
 	}
 
 	public String toString() {
 		return "R";
 	}
-
 }

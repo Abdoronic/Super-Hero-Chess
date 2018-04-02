@@ -28,6 +28,7 @@ public class Game {
 		this.player2 = player2;
 		currentPlayer = player1;
 		board = new Cell[boardHeight][boardWidth];
+		assemblePieces();
 	}
 	
 	public void assemblePieces() {
@@ -105,6 +106,14 @@ public class Game {
 		return payloadPosTarget;
 	}
 
+	public int getBoardWidth() {
+		return boardWidth;
+	}
+	
+	public int getBoardHeight() {
+		return boardHeight;
+	}
+	
 	@Override
 	public String toString() {
 		String s = "";
@@ -127,16 +136,7 @@ public class Game {
 		for (int i = 0; i < board[0].length; i++)
 			System.out.print("--");
 		System.out.println("|");
-		System.out.println("    " + getPlayer1().getName());
+		System.out.println("      " + getPlayer1().getName());
 		return s;
 	}
-
-	public int getBoardWidth() {
-		return boardWidth;
-	}
-
-	public int getBoardHeight() {
-		return boardHeight;
-	}
-
 }

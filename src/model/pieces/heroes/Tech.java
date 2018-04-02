@@ -21,38 +21,17 @@ public class Tech extends ActivatablePowerHero {
 
 	@Override
 	public void move(Direction r) throws WrongTurnException, UnallowedMovementException, OccupiedCellException {
-		if (this.getOwner() != getGame().getCurrentPlayer())
-			throw new WrongTurnException("That is not your turn", this);
-		switch (r) {
-		case DOWNLEFT:
-			moveDownLeft();
-			break;
-		case DOWNRIGHT:
-			moveDownRight();
-			break;
-		case UPLEFT:
-			moveUpLeft();
-			break;
-		case UPRIGHT:
-			moveUpRight();
-			break;
-		default:
-			throw new UnallowedMovementException("This move is unallowed", this, r);
-		}
-
+		Direction[] allowedMoves = { Direction.DOWNLEFT, Direction.DOWNRIGHT, Direction.UPLEFT, Direction.UPRIGHT };
+		move(1, r, allowedMoves);
 	}
 
 	@Override
-	public void usePower(Direction d, Piece target, Point newPos)
-			throws WrongTurnException, PowerAlreadyUsedException, InvalidPowerTargetException {
-		if (this.getOwner() != getGame().getCurrentPlayer())
-			throw new WrongTurnException("That is not your turn", this);
-		if (this.isPowerUsed())
-			throw new PowerAlreadyUsedException("This power has been already used", this);
+	public void usePower(Direction d, Piece target, Point newPos) throws WrongTurnException, PowerAlreadyUsedException, InvalidPowerTargetException, InvalidPowerDirectionException {
+		super.usePower(d, target, newPos);
 		if (newPos != null) {
-			if (this.getOwner() != target.getOwner())
+			if (!isFriendly(target))
 				throw new InvalidPowerTargetException("You can't teleport an enemy", this, target);
-			if (getGame().getCellAt(newPos.x, newPos.y).getPiece() == null) {
+			if (isEmptyCell(newPos.x, newPos.y)) {
 				getGame().getCellAt(newPos.x, newPos.y).setPiece(target);
 				int oldI = target.getPosI();
 				int oldJ = target.getPosJ();
@@ -62,7 +41,7 @@ public class Tech extends ActivatablePowerHero {
 			} else {
 				throw new InvalidPowerTargetException("This cell is Occuiped you can't teleport", this, target);
 			}
-		} else if (target.getOwner() != this.getOwner()) {
+		} else if (!isFriendly(target)) {
 			if (target instanceof ActivatablePowerHero) {
 				if (((ActivatablePowerHero) target).isPowerUsed() == false)
 					((ActivatablePowerHero) target).setPowerUsed(true);
@@ -89,12 +68,11 @@ public class Tech extends ActivatablePowerHero {
 					throw new InvalidPowerTargetException("Already has Armor", this, target);
 			}
 		}
-
+		setPowerUsed(true);
 	}
 
 	@Override
 	public String toString() {
 		return "T";
 	}
-
 }
