@@ -113,8 +113,9 @@ public abstract class Piece implements Movable {
 			throw new OccupiedCellException("This an Occupied Cell by a friendly", this, r);
 		} else {
 			attack(game.getCellAt(i, j).getPiece());
+			Piece attacker = game.getCellAt(oldI, oldJ).getPiece();
 			if (game.getCellAt(i, j).getPiece() == null) {
-				game.getCellAt(i, j).setPiece(this);
+				game.getCellAt(i, j).setPiece(attacker);
 				game.getCellAt(oldI, oldJ).setPiece(null);
 				this.setPosI(i);
 				this.setPosJ(j);
