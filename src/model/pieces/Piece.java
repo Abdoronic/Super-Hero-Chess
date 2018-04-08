@@ -117,8 +117,8 @@ public abstract class Piece implements Movable {
 			if (game.getCellAt(i, j).getPiece() == null) {
 				game.getCellAt(i, j).setPiece(attacker);
 				game.getCellAt(oldI, oldJ).setPiece(null);
-				this.setPosI(i);
-				this.setPosJ(j);
+				attacker.setPosI(i);
+				attacker.setPosJ(j);
 			}
 		}
 		game.switchTurns();
