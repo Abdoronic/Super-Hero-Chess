@@ -34,9 +34,10 @@ public class Medic extends ActivatablePowerHero {
 			throw new InvalidPowerTargetException("You can not revive an enemy", this, target);
 		ArrayList<Piece> deadHeroes = this.getOwner().getDeadCharacters();
 		boolean dead = false;
+		int deadCharacterIdx = -1;
 		for (int k = 0; k < deadHeroes.size(); k++)
 			if (target == deadHeroes.get(k)) {
-				deadHeroes.remove(k);
+				deadCharacterIdx = k;
 				dead = true;
 				break;
 			}
@@ -47,6 +48,7 @@ public class Medic extends ActivatablePowerHero {
 		j = p.y;
 		if (isEmptyCell(i, j)) {
 			getGame().getCellAt(i, j).setPiece(target);
+			deadHeroes.remove(deadCharacterIdx);
 			if(target instanceof ActivatablePowerHero)
 				((ActivatablePowerHero) target).setPowerUsed(false);
 			if(target instanceof Armored)
