@@ -33,6 +33,7 @@ public abstract class Piece implements Movable {
 			attacker.setSideKilled(attacker.getSideKilled() + 1);
 			if (attacker.getSideKilled() % 2 == 0)
 				attacker.setPayloadPos(attacker.getPayloadPos() + 1);
+			attacked.getDeadCharacters().add(target);
 			game.getCellAt(target.getPosI(), target.getPosJ()).setPiece(null);
 		} else if (target instanceof Armored && ((Armored) target).isArmorUp()) {
 			((Armored) target).setArmorUp(false);
