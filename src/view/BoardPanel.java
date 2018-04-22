@@ -1,19 +1,13 @@
 package view;
 
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
 
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import model.game.Game;
 import model.pieces.Piece;
-import view.Assets.Assets;
 import view.customGUI.BoardCell;
 
 @SuppressWarnings("serial")
@@ -21,23 +15,9 @@ public class BoardPanel extends JPanel implements ActionListener{
 	
 	private Game game;
 	private BoardCell[][] board = new BoardCell[6][7];
-	private HashMap<String, Image> images = new HashMap<>();
-	
-	public void loadImages() {
-		String[] name = {"SuperP1", "SuperP2", "ArmoredP1", "ArmoredP2", 
-				"RangedP1", "RangedP2", "MedicP1", "MedicP2", "SpeedsterP1", 
-				"SpeedsterP2", "TechP1", "TechP2", "SideKickP1", "SideKickP2"};
-		try {
-			for (int i = 0; i < name.length; i++)
-				images.put(name[i]+".gif", ImageIO.read(Assets.class.getResource(name[i]+".gif")));
-		} catch (Exception e) {
-			System.out.println("Image not Found");
-		}
-	}
 	
 	public BoardPanel(Game game) {
 		this.game = game;
-		loadImages();
 		setLayout(new GridLayout(6, 7));
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board[i].length; j++) {
@@ -45,7 +25,7 @@ public class BoardPanel extends JPanel implements ActionListener{
 				BoardCell cell = board[i][j];
 				cell.addActionListener(this);
 				add(cell);
-				cell.paintPiece(images);
+				cell.paintPiece();
 			}
 		}
 		setVisible(true);

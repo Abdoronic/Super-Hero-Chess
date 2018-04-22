@@ -1,14 +1,12 @@
 package view.customGUI;
 
-import java.awt.Image;
-import java.util.HashMap;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 import model.game.Game;
 import model.pieces.Piece;
 import model.pieces.sidekicks.SideKick;
+import view.Assets.Assets;
 
 @SuppressWarnings("serial")
 public class BoardCell extends JButton{
@@ -32,7 +30,7 @@ public class BoardCell extends JButton{
 		return getPiece() == null;
 	}
 	
-	public void paintPiece(HashMap<String, Image> images) {
+	public void paintPiece() {
 		if(!isEmpty()) {
 			String name = getPiece().getClass().getSimpleName();
 			if(!(getPiece() instanceof SideKick))
@@ -41,7 +39,7 @@ public class BoardCell extends JButton{
 				else
 					name += "P2";
 			name += ".gif";
-			setIcon(new ImageIcon(images.get(name)));
+			setIcon(new ImageIcon(Assets.class.getResource(name)));
 		}
 	}
 	

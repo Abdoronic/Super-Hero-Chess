@@ -26,6 +26,7 @@ public class SuperHeroChess extends JFrame{
 		add(new PayloadPanel(), BorderLayout.NORTH);
 		add(new BoardPanel(game), BorderLayout.CENTER);
 		add(new InfoPanel(), BorderLayout.SOUTH);
+		pack();
 		setVisible(true);
 	}
 	
