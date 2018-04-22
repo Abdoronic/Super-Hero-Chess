@@ -13,7 +13,6 @@ import javax.swing.JPanel;
 
 import model.game.Game;
 import model.pieces.Piece;
-import model.pieces.sidekicks.SideKick;
 import view.Assets.Assets;
 import view.customGUI.BoardCell;
 
@@ -46,16 +45,7 @@ public class BoardPanel extends JPanel implements ActionListener{
 				BoardCell cell = board[i][j];
 				cell.addActionListener(this);
 				add(cell);
-				if(!isEmpty(i, j)) {
-					String name = getPieceAt(i, j).getClass().getSimpleName();
-					if(!(getPieceAt(i, j) instanceof SideKick))
-						if(getPieceAt(i, j).getOwner() == game.getPlayer1())
-							name += "P1";
-						else
-							name += "P2";
-					name += ".gif";
-					add(new JLabel(new ImageIcon(images.get(name))));
-				}
+				cell.paintPiece(images);
 			}
 		}
 		setVisible(true);

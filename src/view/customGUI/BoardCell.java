@@ -5,7 +5,6 @@ import java.util.HashMap;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 
 import model.game.Game;
 import model.pieces.Piece;
