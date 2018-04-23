@@ -1,5 +1,8 @@
 package model.pieces.heroes;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import exceptions.OccupiedCellException;
 import exceptions.UnallowedMovementException;
 import exceptions.WrongTurnException;
@@ -11,6 +14,9 @@ public class Speedster extends NonActivatablePowerHero {
 
 	public Speedster(Player player, Game game, String name) {
 		super(player, game, name);
+		setStep(2);
+		setAllowedDirections(new ArrayList<>(Arrays.asList(Direction.DOWN, Direction.DOWNLEFT, Direction.DOWNRIGHT, Direction.LEFT,
+				Direction.RIGHT, Direction.UP, Direction.UPLEFT, Direction.UPRIGHT)));
 	}
 
 	@Override

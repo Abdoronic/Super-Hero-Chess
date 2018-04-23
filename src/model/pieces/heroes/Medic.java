@@ -2,6 +2,7 @@ package model.pieces.heroes;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import exceptions.InvalidPowerDirectionException;
 import exceptions.InvalidPowerTargetException;
@@ -18,6 +19,7 @@ public class Medic extends ActivatablePowerHero {
 
 	public Medic(Player player, Game game, String name) {
 		super(player, game, name);
+		setAllowedDirections(new ArrayList<>(Arrays.asList(Direction.DOWN, Direction.LEFT, Direction.RIGHT, Direction.UP)));
 	}
 
 	@Override

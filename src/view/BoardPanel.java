@@ -14,10 +14,12 @@ import view.customGUI.BoardCell;
 public class BoardPanel extends JPanel implements ActionListener{
 	
 	private Game game;
+	private Piece selectedPiece;
 	private BoardCell[][] board = new BoardCell[6][7];
 	
 	public BoardPanel(Game game) {
 		this.game = game;
+		this.selectedPiece = null;
 		setLayout(new GridLayout(6, 7));
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board[i].length; j++) {
