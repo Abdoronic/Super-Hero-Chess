@@ -1,6 +1,8 @@
 package model.pieces.heroes;
 
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import exceptions.InvalidPowerDirectionException;
 import exceptions.InvalidPowerTargetException;
@@ -10,6 +12,7 @@ import exceptions.UnallowedMovementException;
 import exceptions.WrongTurnException;
 import model.game.Direction;
 import model.game.Game;
+import model.game.Move;
 import model.game.Player;
 import model.pieces.Piece;
 
@@ -17,6 +20,7 @@ public class Super extends ActivatablePowerHero {
 
 	public Super(Player player, Game game, String name) {
 		super(player, game, name);
+		setAllowedDirections(new ArrayList<>(Arrays.asList(Direction.DOWN, Direction.LEFT, Direction.RIGHT, Direction.UP)));
 	}
 
 	@Override
@@ -24,7 +28,13 @@ public class Super extends ActivatablePowerHero {
 		Direction[] allowedMoves = { Direction.DOWN, Direction.LEFT, Direction.RIGHT, Direction.UP };
 		move(1, r, allowedMoves);
 	}
-
+	
+	public boolean inBounds(int i, int j) {
+		if (i < 0 || i > 6 || j < 0 || j > 5)
+			return false;
+		return true;
+	}
+	
 	public boolean isValidPower(int i, int j) {
 		if (i < 0 || i > 6 || j < 0 || j > 5)
 			return false;
@@ -53,6 +63,19 @@ public class Super extends ActivatablePowerHero {
 			attack(getGame().getCellAt(p2.x, p2.y).getPiece());
 		setPowerUsed(true);
 		getGame().switchTurns();
+	}
+	
+	public ArrayList<Move> getAllowedAbilityMoves() {
+		ArrayList<Move> allowedAbilityMoves = new ArrayList<>();
+		for(Direction d : getAllowedDirections()) {
+			Point p1 = getMoveLocation(getPosI(), getPosJ(), 1, d, false);
+			Point p2 = getMoveLocation(getPosI(), getPosJ(), 1, d, false);
+			if(inBounds(p1.x, p1.y))
+				allowedAbilityMoves.add(new Move(p1, d));
+			if(inBounds(p2.x, p2.y))
+				allowedAbilityMoves.add(new Move(p2, d));
+		}
+		return allowedAbilityMoves;
 	}
 
 	@Override

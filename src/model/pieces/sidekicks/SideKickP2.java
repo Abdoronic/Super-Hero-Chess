@@ -1,5 +1,8 @@
 package model.pieces.sidekicks;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import exceptions.OccupiedCellException;
 import exceptions.UnallowedMovementException;
 import exceptions.WrongTurnException;
@@ -10,6 +13,8 @@ public class SideKickP2 extends SideKick {
 
 	public SideKickP2(Game game, String name) {
 		super(game.getPlayer2(), game, name);
+		setAllowedDirections(new ArrayList<>(Arrays.asList(Direction.DOWN, Direction.DOWNLEFT, Direction.DOWNRIGHT, Direction.LEFT,
+				Direction.RIGHT)));
 	}
 
 	@Override

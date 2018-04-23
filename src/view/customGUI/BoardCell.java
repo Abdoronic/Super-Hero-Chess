@@ -26,6 +26,8 @@ public class BoardCell extends JButton {
 
 	public BoardCell(Game game, int i, int j) {
 		setBorderPainted(false);
+		setOpaque(false);
+		setFocusable(false);
 		this.game = game;
 		this.i = i;
 		this.j = j;
