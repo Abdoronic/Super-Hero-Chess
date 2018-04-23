@@ -22,18 +22,20 @@ public class BoardPanel extends JPanel implements ActionListener {
 
 	private Game game;
 
-	private Piece SelectedPiece;
-	private Boolean SelectedRanged;
-	private Boolean SelectedSuper;
-	private Boolean HackedPiece;
-	private Boolean Teleporting;
-	private Boolean RestorePiece;
+	private static Piece selectedPiece;
+	private static Piece targetPiece;
+	private static Boolean isAbility;
+	private static Boolean selectedRanged;
+	private static Boolean selectedSuper;
+	private static Boolean hackedPiece;
+	private static Boolean restorePiece;
+	private static Boolean teleporting;
   
 	private BoardCell[][] board = new BoardCell[6][7];
 
 	public BoardPanel(Game game) {
 		this.game = game;
-		this.selectedPiece = null;
+//		this.selectedPiece = null;
 		setLayout(new GridLayout(6, 7));
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board[i].length; j++) {
@@ -54,16 +56,10 @@ public class BoardPanel extends JPanel implements ActionListener {
 	public boolean isEmpty(int i, int j) {
 		return getPieceAt(i, j) == null;
 	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		System.out.println("here");
-
-	}
 	
 	public void SelectPiece(BoardCell c) { 
-		SelectedPiece.setPosI(c.getI());
-		SelectedPiece.setPosJ(c.getJ());
+		selectedPiece.setPosI(c.getI());
+		selectedPiece.setPosJ(c.getJ());
 		
 	}
 
@@ -80,11 +76,11 @@ public class BoardPanel extends JPanel implements ActionListener {
 					JOptionPane.PLAIN_MESSAGE, null, graveyard, null);
 
 			Piece revived = dead.get(pos);
-			SelectedPiece = revived;
+			selectedPiece = revived;
 
 		}
 		if (p instanceof Ranged) {
-			SelectedRanged = true;
+			selectedRanged = true;
 		}
 		if (p instanceof Tech) {
 			Object[] TechAbilities = { "Hack Enemy", "Restore ability", "Teleport" };
@@ -93,17 +89,23 @@ public class BoardPanel extends JPanel implements ActionListener {
 			int pos = JOptionPane.showOptionDialog(null, abilities, "Tech", JOptionPane.OK_CANCEL_OPTION,
 					JOptionPane.PLAIN_MESSAGE, null, TechAbilities, null);
 			if (pos == 0) {
-				HackedPiece = true;
+				hackedPiece = true;
 			}
 			if (pos == 1) {
-				RestorePiece = true;
+				restorePiece = true;
 			}
 			if (pos == 2) {
-				Teleporting =true;
+				teleporting =true;
 			}
 		}
 		if (p instanceof Super) {
-			SelectedSuper = true;
+			selectedSuper = true;
 		}
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		System.out.println("here");
+
 	}
 }
