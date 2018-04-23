@@ -1,12 +1,14 @@
 package model.pieces;
 
 import java.awt.Point;
+import java.util.ArrayList;
 
 import exceptions.OccupiedCellException;
 import exceptions.UnallowedMovementException;
 import exceptions.WrongTurnException;
 import model.game.Direction;
 import model.game.Game;
+import model.game.Move;
 import model.game.Player;
 import model.pieces.heroes.Armored;
 import model.pieces.sidekicks.SideKick;
@@ -18,11 +20,14 @@ public abstract class Piece implements Movable {
 	private Game game;
 	private int posI;
 	private int posJ;
+	private int step;
+	private ArrayList<Direction> allowedDirections;
 
 	public Piece(Player p, Game g, String name) {
 		this.owner = p;
 		this.game = g;
 		this.name = name;
+		this.step = 1;
 	}
 
 	public void attack(Piece target) {
@@ -136,6 +141,16 @@ public abstract class Piece implements Movable {
 	public boolean isFriendly(int i, int j) {
 		return owner == game.getCellAt(i, j).getPiece().owner;
 	}
+	
+	public ArrayList<Move> getAllowedMoves() {
+		ArrayList<Move> allowedMoves = new ArrayList<>();
+		for(Direction d : allowedDirections) {
+			Point p = getMoveLocation(posI, posJ, step, d, true);
+			if(!isFriendly(p.x, p.y))
+				allowedMoves.add(new Move(p, d));
+		}
+		return allowedMoves;
+	}
 
 	public String getName() {
 		return name;
@@ -163,5 +178,21 @@ public abstract class Piece implements Movable {
 
 	public Player getOwner() {
 		return owner;
+	}
+	
+	public int getStep() {
+		return step;
+	}
+
+	public void setStep(int step) {
+		this.step = step;
+	}
+
+	public ArrayList<Direction> getAllowedDirections() {
+		return allowedDirections;
+	}
+
+	public void setAllowedDirections(ArrayList<Direction> allowedDirections) {
+		this.allowedDirections = allowedDirections;
 	}
 }

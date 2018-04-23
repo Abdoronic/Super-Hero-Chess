@@ -1,6 +1,8 @@
 package model.pieces.heroes;
 
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import exceptions.InvalidPowerDirectionException;
 import exceptions.InvalidPowerTargetException;
@@ -17,6 +19,7 @@ public class Tech extends ActivatablePowerHero {
 
 	public Tech(Player player, Game game, String name) {
 		super(player, game, name);
+		setAllowedDirections(new ArrayList<>(Arrays.asList(Direction.DOWNLEFT, Direction.DOWNRIGHT, Direction.UPLEFT, Direction.UPRIGHT )));
 	}
 
 	@Override

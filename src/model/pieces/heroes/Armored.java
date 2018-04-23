@@ -1,5 +1,8 @@
 package model.pieces.heroes;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import exceptions.OccupiedCellException;
 import exceptions.UnallowedMovementException;
 import exceptions.WrongTurnException;
@@ -14,6 +17,9 @@ public class Armored extends NonActivatablePowerHero {
 	public Armored(Player player, Game game, String name) {
 		super(player, game, name);
 		this.armorUp = true;
+		setAllowedDirections(new ArrayList<>(Arrays.asList(Direction.DOWN, Direction.DOWNLEFT, Direction.DOWNRIGHT, Direction.LEFT,
+				Direction.RIGHT, Direction.UP, Direction.UPLEFT, Direction.UPRIGHT)));
+
 	}
 
 	public boolean isArmorUp() {

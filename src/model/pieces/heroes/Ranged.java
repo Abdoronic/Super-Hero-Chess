@@ -1,6 +1,8 @@
 package model.pieces.heroes;
 
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import exceptions.InvalidPowerDirectionException;
 import exceptions.InvalidPowerTargetException;
@@ -10,6 +12,7 @@ import exceptions.UnallowedMovementException;
 import exceptions.WrongTurnException;
 import model.game.Direction;
 import model.game.Game;
+import model.game.Move;
 import model.game.Player;
 import model.pieces.Piece;
 
@@ -17,6 +20,8 @@ public class Ranged extends ActivatablePowerHero {
 
 	public Ranged(Player player, Game game, String name) {
 		super(player, game, name);
+		setAllowedDirections(new ArrayList<>(Arrays.asList(Direction.DOWN, Direction.DOWNLEFT, Direction.DOWNRIGHT, Direction.LEFT,
+				Direction.RIGHT, Direction.UP, Direction.UPLEFT, Direction.UPRIGHT)));
 	}
 
 	@Override
@@ -69,6 +74,42 @@ public class Ranged extends ActivatablePowerHero {
 				getGame().switchTurns();
 			}
 		}
+	}
+	
+	public ArrayList<Move> getAllowedAbilityMoves() {
+		ArrayList<Move> allowedAbilityMoves = new ArrayList<>();
+		int i = this.getPosI();
+		int j = this.getPosJ();
+		Piece p;
+		for (int k = i+1; k < 7; k++) {
+			p = getGame().getCellAt(k, j).getPiece();
+			if (p != null) {
+				allowedAbilityMoves.add(new Move(new Point(p.getPosI(), p.getPosJ()), Direction.DOWN));
+				break;
+			}
+		}
+		for (int k = i-1; k > -1; k--) {
+			p = getGame().getCellAt(k, j).getPiece();
+			if (p != null) {
+				allowedAbilityMoves.add(new Move(new Point(p.getPosI(), p.getPosJ()), Direction.UP));
+				break;
+			}
+		}
+		for (int k = j-1; k > -1; k--) {
+			p = getGame().getCellAt(i, k).getPiece();
+			if (p != null) {
+				allowedAbilityMoves.add(new Move(new Point(p.getPosI(), p.getPosJ()), Direction.LEFT));
+				break;
+			}
+		}
+		for (int k = j+1; k < 6; k++) {
+			p = getGame().getCellAt(i, k).getPiece();
+			if (p != null) {
+				allowedAbilityMoves.add(new Move(new Point(p.getPosI(), p.getPosJ()), Direction.RIGHT));
+				break;
+			}
+		}
+		return allowedAbilityMoves;
 	}
 
 	public String toString() {
