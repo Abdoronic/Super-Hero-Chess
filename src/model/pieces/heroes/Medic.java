@@ -12,6 +12,7 @@ import exceptions.UnallowedMovementException;
 import exceptions.WrongTurnException;
 import model.game.Direction;
 import model.game.Game;
+import model.game.Move;
 import model.game.Player;
 import model.pieces.Piece;
 
@@ -61,6 +62,36 @@ public class Medic extends ActivatablePowerHero {
 			throw new InvalidPowerTargetException("You can not revive here, it is an occupied cell", this, target);
 		setPowerUsed(true);
 		getGame().switchTurns();
+	}
+	
+	public ArrayList<Move> getAllowedAbilityMoves() {
+		ArrayList<Move> allowedAbilityMoves = new ArrayList<>();
+		ArrayList<Direction> abilityDirections = new ArrayList<>(Arrays.asList(Direction.DOWN, Direction.DOWNLEFT, Direction.DOWNRIGHT, Direction.LEFT,
+				Direction.RIGHT, Direction.UP, Direction.UPLEFT, Direction.UPRIGHT));
+		for(Direction d : abilityDirections) {
+			Point p = getMoveLocation(getPosI(), getPosJ(), 1, d, true);
+			if(isEmptyCell(p.x, p.y))
+				allowedAbilityMoves.add(new Move(p, d));
+		}
+		return allowedAbilityMoves;
+	}
+	
+	public boolean isAllowdAbility(Point p) {
+		ArrayList<Move> allowedAbilityMoves = getAllowedAbilityMoves();
+		for (Move m : allowedAbilityMoves) {
+			if (m.samePoint(p))
+				return true;
+		}
+		return false;
+	}
+	
+	public Direction mapToAbilityDirection(Point p) {
+		ArrayList<Move> allowedAbilityMoves = getAllowedAbilityMoves();
+		for (Move m : allowedAbilityMoves) {
+			if (m.samePoint(p))
+				return m.getDirection();
+		}
+		return null;
 	}
 
 	@Override

@@ -146,12 +146,30 @@ public abstract class Piece implements Movable {
 		ArrayList<Move> allowedMoves = new ArrayList<>();
 		for(Direction d : allowedDirections) {
 			Point p = getMoveLocation(posI, posJ, step, d, true);
-			if(!isFriendly(p.x, p.y))
+			if(isEmptyCell(p.x, p.y) || !isFriendly(p.x, p.y))
 				allowedMoves.add(new Move(p, d));
 		}
 		return allowedMoves;
 	}
+	
+	public boolean isAllowdMove(Point p) {
+		ArrayList<Move> allowedMoves = getAllowedMoves();
+		for (Move m : allowedMoves) {
+			if (m.samePoint(p))
+				return true;
+		}
+		return false;
+	}
 
+	public Direction mapToMoveDirection(Point p) {
+		ArrayList<Move> allowedMoves = getAllowedMoves();
+		for (Move m : allowedMoves) {
+			if (m.samePoint(p))
+				return m.getDirection();
+		}
+		return null;
+	}
+	
 	public String getName() {
 		return name;
 	}

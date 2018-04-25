@@ -77,6 +77,24 @@ public class Super extends ActivatablePowerHero {
 		}
 		return allowedAbilityMoves;
 	}
+	
+	public boolean isAllowdAbility(Point p) {
+		ArrayList<Move> allowedAbilityMoves = getAllowedAbilityMoves();
+		for (Move m : allowedAbilityMoves) {
+			if (m.samePoint(p))
+				return true;
+		}
+		return false;
+	}
+	
+	public Direction mapToAbilityDirection(Point p) {
+		ArrayList<Move> allowedAbilityMoves = getAllowedAbilityMoves();
+		for (Move m : allowedAbilityMoves) {
+			if (m.samePoint(p))
+				return m.getDirection();
+		}
+		return null;
+	}
 
 	@Override
 	public String toString() {

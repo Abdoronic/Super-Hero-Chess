@@ -1,19 +1,11 @@
 package view.customGUI;
 
-import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
 import model.game.Game;
 import model.pieces.Piece;
-import model.pieces.heroes.Medic;
-import model.pieces.heroes.Ranged;
-import model.pieces.heroes.Super;
-import model.pieces.heroes.Tech;
 import model.pieces.sidekicks.SideKick;
 import view.Assets.Assets;
 
