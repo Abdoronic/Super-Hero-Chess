@@ -25,8 +25,7 @@ public class Medic extends ActivatablePowerHero {
 
 	@Override
 	public void move(Direction r) throws WrongTurnException, UnallowedMovementException, OccupiedCellException {
-		Direction[] allowedMoves = { Direction.DOWN, Direction.LEFT, Direction.RIGHT, Direction.UP };
-		move(1, r, allowedMoves);
+		move(1, r, getAllowedDirections());
 	}
 
 	public void usePower(Direction d, Piece target, Point newPos) throws WrongTurnException, PowerAlreadyUsedException, InvalidPowerTargetException, InvalidPowerDirectionException {

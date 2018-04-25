@@ -18,7 +18,6 @@ import model.pieces.heroes.Medic;
 import model.pieces.heroes.Ranged;
 import model.pieces.heroes.Super;
 import model.pieces.heroes.Tech;
-import view.customGUI.BoardCell;
 
 @SuppressWarnings("serial")
 public class BoardPanel extends JPanel implements ActionListener {
@@ -44,8 +43,8 @@ public class BoardPanel extends JPanel implements ActionListener {
 		this.infoPanel = infoPanel;
 		this.payloadPanel = payloadPanel;
 		setLayout(new GridLayout(6, 7));
-		for (int i = 0; i < board.length; i++) {
-			for (int j = 0; j < board[i].length; j++) {
+		for (int i = board.length - 1; i >= 0; i--) {
+			for (int j = board[i].length - 1; j >= 0; j--) {
 				board[i][j] = new BoardCell(game, i, j);
 				BoardCell cell = board[i][j];
 				cell.addActionListener(this);
@@ -57,12 +56,20 @@ public class BoardPanel extends JPanel implements ActionListener {
 	}
 	
 	public void refresh() {
-		for (int i = 0; i < board.length; i++) {
-			for (int j = 0; j < board[i].length; j++) {
+		this.removeAll();
+		setLayout(new GridLayout(6, 7));
+		for (int i = board.length - 1; i >= 0; i--) {
+			for (int j = board[i].length - 1; j >= 0; j--) {
+				board[i][j] = new BoardCell(game, i, j);
 				BoardCell cell = board[i][j];
+				cell.addActionListener(this);
+				add(cell);
 				cell.paintPiece();
 			}
 		}
+		this.revalidate();
+		this.repaint();
+		setVisible(true);
 	}
 
 	public Piece getPieceAt(int i, int j) {
@@ -136,6 +143,7 @@ public class BoardPanel extends JPanel implements ActionListener {
 			if (selectedPiece == null) {
 				displayMessage("You need to select a Hero to use their ability");
 			} else {
+				System.out.println("will select Ability");
 				selectAbility(selectedPiece);
 			}
 			return; // stop action
@@ -151,17 +159,23 @@ public class BoardPanel extends JPanel implements ActionListener {
 				return;
 			if (isFriendly(sourcePiece)) {
 				select(sourcePiece);
+				System.out.println("selected: " + sourcePiece);
 			} else {
 				displayMessage("Can not select an enemy Piece");
+				System.out.println("An enemyyyyy");
 			}
+			refresh();
 			return; // stop action
 		}
 
 		// Doing a move or selecting another piece
 		if (!isAbility) {
+			System.out.println("enterd moving block");
 			if (!isEmpty(cell) && isFriendly(sourcePiece)) {
 				select(sourcePiece);
+				System.out.println("selected again: " + sourcePiece);
 			} else if (selectedPiece.isAllowdMove(sourcePoint)) {
+				System.out.println("Ahe ha tmove 5alas");
 				if (isEmpty(cell)) {
 					doMoveAnimation();
 				} else {
@@ -169,15 +183,17 @@ public class BoardPanel extends JPanel implements ActionListener {
 					doMoveAnimation();
 				}
 				try {
-					sourcePiece.move(selectedPiece.mapToMoveDirection(sourcePoint));
+					selectedPiece.move(selectedPiece.mapToMoveDirection(sourcePoint));
+					System.out.println("Moved");
 					reset();
 				} catch (Exception ex) {
 					displayMessage(ex.getMessage());
 				}
 			}
+			refresh();
 			return; // end action
 		}
-
+		System.out.println("Enterd Ability block");
 		// Abilities
 		if (selectedSuper) {
 			Super superPiece = (Super) selectedPiece;
@@ -193,6 +209,7 @@ public class BoardPanel extends JPanel implements ActionListener {
 			} else {
 				resetAbilities();
 			}
+			refresh();
 			return;
 		}
 
@@ -210,6 +227,7 @@ public class BoardPanel extends JPanel implements ActionListener {
 			} else {
 				resetAbilities();
 			}
+			refresh();
 			return;
 		}
 
@@ -227,6 +245,7 @@ public class BoardPanel extends JPanel implements ActionListener {
 			} else {
 				resetAbilities();
 			}
+			refresh();
 			return;
 		}
 
@@ -286,6 +305,7 @@ public class BoardPanel extends JPanel implements ActionListener {
 				}
 			}
 		}
+		refresh();
 	}
 
 	public void lightUpAvailableMoves() {

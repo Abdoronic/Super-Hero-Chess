@@ -2,6 +2,7 @@ package model.pieces;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import exceptions.OccupiedCellException;
 import exceptions.UnallowedMovementException;
@@ -28,6 +29,8 @@ public abstract class Piece implements Movable {
 		this.game = g;
 		this.name = name;
 		this.step = 1;
+		allowedDirections = new ArrayList<>(Arrays.asList(Direction.DOWN, Direction.DOWNLEFT, Direction.DOWNRIGHT, 
+				Direction.LEFT, Direction.RIGHT, Direction.UP, Direction.UPLEFT, Direction.UPRIGHT));
 	}
 
 	public void attack(Piece target) {
@@ -52,7 +55,7 @@ public abstract class Piece implements Movable {
 			game.checkWinner();
 	}
 	
-	public void move(int step, Direction r, Direction[] allowedMoves) throws UnallowedMovementException, OccupiedCellException, WrongTurnException {
+	public void move(int step, Direction r, ArrayList<Direction> allowedMoves) throws UnallowedMovementException, OccupiedCellException, WrongTurnException {
 		if (this.getOwner() != getGame().getCurrentPlayer())
 			throw new WrongTurnException("That is not your turn", this);
 		boolean allowed = false;
