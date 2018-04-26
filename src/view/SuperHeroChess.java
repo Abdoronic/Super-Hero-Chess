@@ -11,8 +11,6 @@ import controller.Controller;
 @SuppressWarnings("serial")
 public class SuperHeroChess extends JFrame{
 	
-	private Controller controller;
-	
 	private PayloadPanel payloadPanel;
 	private InfoPanel infoPanel;
 	private BoardPanel boardPanel;
@@ -23,7 +21,6 @@ public class SuperHeroChess extends JFrame{
 	final static int SCREEN_HEIGHT = Toolkit.getDefaultToolkit().getScreenSize().height;
 	
 	public SuperHeroChess(Controller controller) {
-		this.controller = controller;
 		setTitle("Super Hero Chess");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setBounds(SCREEN_WIDTH/2 - WIDTH/2, SCREEN_HEIGHT/2 - HEIGHT/2, WIDTH, HEIGHT);
@@ -40,7 +37,8 @@ public class SuperHeroChess extends JFrame{
 	}
 	
 	public void displayMessage(String msg) {
-		JOptionPane.showMessageDialog(this, msg);
+		JOptionPane.showMessageDialog(this, msg, "Message",
+				JOptionPane.PLAIN_MESSAGE);
 	}
 
 	public PayloadPanel getPayloadPanel() {

@@ -23,12 +23,17 @@ import view.BoardCell;
 import view.BoardPanel;
 import view.InfoPanel;
 import view.PayloadPanel;
+import view.StartButton;
+import view.StartMenu;
+import view.StartPage;
 import view.SuperHeroChess;
 
 public class Controller implements ActionListener {
 
 	private Game game;
-
+	
+	private StartPage startPage;
+	private StartMenu startMenu;
 	private SuperHeroChess superHeroChess;
 	private BoardPanel boardPanel;
 	private PayloadPanel payloadPanel;
@@ -45,7 +50,11 @@ public class Controller implements ActionListener {
 	private static boolean teleporting;
 	
 	public Controller() {
-		game = new Game(new Player("P1"), new Player("P2"));
+		startPage = new StartPage(this);
+	}
+	
+	public void buildGame(String player1, String player2) {
+		game = new Game(new Player(player1), new Player(player2));
 		superHeroChess = new SuperHeroChess(this);
 		payloadPanel = superHeroChess.getPayloadPanel();
 		infoPanel = superHeroChess.getInfoPanel();
@@ -54,8 +63,24 @@ public class Controller implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {	
-		System.out.println(game.toString());
 		JButton sourceButton = (JButton) e.getSource();
+		
+		if(sourceButton instanceof StartButton) {
+			startPage.dispose();
+			startMenu = new StartMenu(this);
+			return;
+		}
+		
+		if(sourceButton.getActionCommand() == "Enter") {
+			startMenu.dispose();
+			buildGame(startMenu.getPlayer1(), startMenu.getPlayer2());
+			return;
+		}
+		
+		if(sourceButton.getActionCommand() == "Quit") {
+			startMenu.dispose();
+			return;
+		}
 
 		// Checking if ability button is pressed
 		if (!(sourceButton instanceof BoardCell)) {
@@ -254,12 +279,18 @@ public class Controller implements ActionListener {
 	}
 
 	public void selectAbility(Piece p) {
-		if(p instanceof ActivatablePowerHero)
-			isAbility = true;
+		if(!(p instanceof ActivatablePowerHero))
+			return;
+		if(((ActivatablePowerHero)p).isPowerUsed()) {
+			superHeroChess.displayMessage("Hero Already Used Their Ability");
+			return;
+		}
+		isAbility = true;
 		boardPanel.lightOffAvailableMoves();
 		if (p instanceof Medic) {
 			ArrayList<Piece> dead = p.getOwner().getDeadCharacters();
 			if (dead.size() == 0) {
+				superHeroChess.displayMessage("No Characters To Revive");
 				resetAbilities();
 				return;
 			}
@@ -269,9 +300,12 @@ public class Controller implements ActionListener {
 			}
 			JPanel revive = new JPanel();
 			revive.add(new JLabel("Please select a dead character to revive"));
-			int pos = JOptionPane.showOptionDialog(null, revive, "Medic", JOptionPane.OK_CANCEL_OPTION,
+			int pos = JOptionPane.showOptionDialog(superHeroChess, revive, "Medic", JOptionPane.OK_CANCEL_OPTION,
 					JOptionPane.PLAIN_MESSAGE, null, graveyard, null);
-
+			if (pos == JOptionPane.CLOSED_OPTION) {
+				resetAbilities();
+	            return;
+	        }
 			Piece revived = dead.get(pos);
 			targetPiece = revived;
 			boardPanel.lightUpAvailableAbilityMoves();
@@ -284,7 +318,7 @@ public class Controller implements ActionListener {
 			Object[] TechAbilities = { "Hack Enemy", "Restore ability", "Teleport" };
 			JPanel abilities = new JPanel();
 			abilities.add(new JLabel("Please choose a Tech ability"));
-			int pos = JOptionPane.showOptionDialog(null, abilities, "Tech", JOptionPane.OK_CANCEL_OPTION,
+			int pos = JOptionPane.showOptionDialog(superHeroChess, abilities, "Tech", JOptionPane.OK_CANCEL_OPTION,
 					JOptionPane.PLAIN_MESSAGE, null, TechAbilities, null);
 			if (pos == 0)
 				hackedPiece = true;
@@ -292,6 +326,10 @@ public class Controller implements ActionListener {
 				restorePiece = true;
 			if (pos == 2)
 				teleporting = true;
+			if (pos == JOptionPane.CLOSED_OPTION) {
+				resetAbilities();
+	            return;
+	        }
 		}
 		if (p instanceof Super) {
 			selectedSuper = true;
@@ -329,10 +367,12 @@ public class Controller implements ActionListener {
 			superHeroChess.displayMessage(game.getPlayer1().getName() + " Won!");
 			superHeroChess.setVisible(false);
 			superHeroChess.dispose();
+			startMenu = new StartMenu(this);
 		} else if (game.getPlayer2().getPayloadPos() >= 6) {
 			superHeroChess.displayMessage(game.getPlayer2().getName() + " Won!");
 			superHeroChess.setVisible(false);
 			superHeroChess.dispose();
+			startMenu = new StartMenu(this);
 		}
 	}
 
