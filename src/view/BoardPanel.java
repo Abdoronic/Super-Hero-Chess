@@ -19,7 +19,6 @@ public class BoardPanel extends JPanel {
 			for (int j = board[i].length - 1; j >= 0; j--) {
 				board[i][j] = new BoardCell(controller, i, j);
 				BoardCell cell = board[i][j];
-				cell.addActionListener(controller);
 				add(cell);
 				cell.paintPiece();
 			}
@@ -34,7 +33,6 @@ public class BoardPanel extends JPanel {
 			for (int j = board[i].length - 1; j >= 0; j--) {
 				board[i][j] = new BoardCell(controller, i, j);
 				BoardCell cell = board[i][j];
-				cell.addActionListener(controller);
 				add(cell);
 				cell.paintPiece();
 			}

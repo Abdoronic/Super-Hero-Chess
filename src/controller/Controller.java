@@ -19,6 +19,7 @@ import model.pieces.heroes.Medic;
 import model.pieces.heroes.Ranged;
 import model.pieces.heroes.Super;
 import model.pieces.heroes.Tech;
+import view.BoardButton;
 import view.BoardCell;
 import view.BoardPanel;
 import view.InfoPanel;
@@ -87,7 +88,7 @@ public class Controller implements ActionListener {
 		}
 
 		// Checking if ability button is pressed
-		if (!(sourceButton instanceof BoardCell)) {
+		if (!(sourceButton instanceof BoardButton)) {
 			if (selectedPiece == null) {
 				superHeroChess.displayMessage("You need to select a Hero to use their ability");
 			} else {
@@ -97,7 +98,7 @@ public class Controller implements ActionListener {
 			return; // stop action
 		}
 
-		BoardCell cell = (BoardCell) sourceButton;
+		BoardButton cell = (BoardButton) sourceButton;
 		Piece sourcePiece = cell.getPiece();
 		Point sourcePoint = new Point(cell.getJ(), cell.getI());
 
@@ -264,7 +265,7 @@ public class Controller implements ActionListener {
 		return getPieceAt(i, j) == null;
 	}
 
-	public boolean isEmpty(BoardCell cell) {
+	public boolean isEmpty(BoardButton cell) {
 		return cell.getPiece() == null;
 	}
 

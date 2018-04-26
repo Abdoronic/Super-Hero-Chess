@@ -1,8 +1,13 @@
 package view;
 
 
+import java.awt.Dimension;
+import java.awt.LayoutManager;
+
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.OverlayLayout;
 
 import controller.Controller;
 import model.pieces.Piece;
@@ -10,20 +15,34 @@ import model.pieces.sidekicks.SideKick;
 import view.Assets.Assets;
 
 @SuppressWarnings("serial")
-public class BoardCell extends JButton {
+public class BoardCell extends JPanel {
 
 	private Controller controller;
+	private BoardButton button;
+	private JLabel background;
 	private int i;
 	private int j;
 
 	public BoardCell(Controller controller, int i, int j) {
-		setBorderPainted(false);
-		setContentAreaFilled(false);
-		setOpaque(false);
-		setFocusable(false);
 		this.controller = controller;
 		this.i = i;
 		this.j = j;
+		LayoutManager overlay = new OverlayLayout(this);
+		setLayout(overlay);
+		button = new BoardButton(controller, i, j);
+		button.setMaximumSize(new Dimension(200, 150));
+		button.addActionListener(controller);
+		button.setBorderPainted(false);
+		button.setContentAreaFilled(false);
+		button.setOpaque(false);
+		button.setFocusable(false);
+		add(button);
+		
+		background = new JLabel();
+		background.setMaximumSize(new Dimension(200, 150));
+		background.setIcon(new ImageIcon(Assets.class.getResource("background.jpg")));
+		add(background);
+		setVisible(true);
 	}
 
 	public Piece getPiece() {
@@ -43,11 +62,9 @@ public class BoardCell extends JButton {
 				else
 					name += "P2";
 			name += ".gif";
-			setIcon(new ImageIcon(Assets.class.getResource(name)));
+			button.setIcon(new ImageIcon(Assets.class.getResource(name)));
 		}
 	}
-
-	
 
 	public int getI() {
 		return i;
@@ -63,6 +80,11 @@ public class BoardCell extends JButton {
 
 	public void setJ(int j) {
 		this.j = j;
+	}
+	
+	@Override
+	public boolean isOptimizedDrawingEnabled() {
+		return false;
 	}
 
 }
