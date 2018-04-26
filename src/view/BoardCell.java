@@ -18,6 +18,7 @@ public class BoardCell extends JButton {
 
 	public BoardCell(Controller controller, int i, int j) {
 		setBorderPainted(false);
+		setContentAreaFilled(false);
 		setOpaque(false);
 		setFocusable(false);
 		this.controller = controller;
