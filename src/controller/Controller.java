@@ -386,7 +386,7 @@ public class Controller implements ActionListener {
 		return game;
 	}
 	
-	public static Piece getSelectedPiece() {
+	public Piece getSelectedPiece() {
 		return selectedPiece;
 	}
 

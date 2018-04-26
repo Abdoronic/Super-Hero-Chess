@@ -3,7 +3,6 @@ package view;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -12,7 +11,6 @@ import controller.Controller;
 import model.pieces.Piece;
 import model.pieces.heroes.ActivatablePowerHero;
 import model.pieces.heroes.Armored;
-import view.Assets.Assets;
 
 @SuppressWarnings("serial")
 public class InfoPanel extends JPanel {
