@@ -24,8 +24,7 @@ public class Tech extends ActivatablePowerHero {
 
 	@Override
 	public void move(Direction r) throws WrongTurnException, UnallowedMovementException, OccupiedCellException {
-		Direction[] allowedMoves = { Direction.DOWNLEFT, Direction.DOWNRIGHT, Direction.UPLEFT, Direction.UPRIGHT };
-		move(1, r, allowedMoves);
+		move(1, r, getAllowedDirections());
 	}
 
 	@Override

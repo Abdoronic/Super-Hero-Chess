@@ -4,33 +4,54 @@ import java.awt.BorderLayout;
 import java.awt.Toolkit;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
-import model.game.Game;
-import model.game.Player;
+import controller.Controller;
 
 @SuppressWarnings("serial")
 public class SuperHeroChess extends JFrame{
 	
-//	private Game game;
+	private PayloadPanel payloadPanel;
+	private InfoPanel infoPanel;
+	private BoardPanel boardPanel;
+	
 	final static int WIDTH = 1280;
 	final static int HEIGHT = 720;
 	final static int SCREEN_WIDTH = Toolkit.getDefaultToolkit().getScreenSize().width;
 	final static int SCREEN_HEIGHT = Toolkit.getDefaultToolkit().getScreenSize().height;
 	
-	public SuperHeroChess(Game game) {
-//		this.game = game;
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+	public SuperHeroChess(Controller controller) {
 		setTitle("Super Hero Chess");
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setBounds(SCREEN_WIDTH/2 - WIDTH/2, SCREEN_HEIGHT/2 - HEIGHT/2, WIDTH, HEIGHT);
 		setLayout(new BorderLayout());
-		add(new PayloadPanel(), BorderLayout.NORTH);
-		add(new BoardPanel(game), BorderLayout.CENTER);
-		add(new InfoPanel(), BorderLayout.SOUTH);
+		payloadPanel = new PayloadPanel();
+		infoPanel = new InfoPanel(controller);
+		boardPanel = new BoardPanel(controller);
+		
+		add(payloadPanel, BorderLayout.NORTH);
+		add(boardPanel, BorderLayout.CENTER);
+		add(infoPanel, BorderLayout.SOUTH);
 		pack();
 		setVisible(true);
 	}
 	
-	public static void main(String[] args) {
-		new SuperHeroChess(new Game(new Player("P1"), new Player("P2")));
+	public void displayMessage(String msg) {
+		JOptionPane.showMessageDialog(this, msg, "Message",
+				JOptionPane.PLAIN_MESSAGE);
 	}
+
+	public PayloadPanel getPayloadPanel() {
+		return payloadPanel;
+	}
+
+	public InfoPanel getInfoPanel() {
+		return infoPanel;
+	}
+
+	public BoardPanel getBoardPanel() {
+		return boardPanel;
+	}
+	
+
 }

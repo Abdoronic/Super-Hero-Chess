@@ -25,8 +25,7 @@ public class Super extends ActivatablePowerHero {
 
 	@Override
 	public void move(Direction r) throws WrongTurnException, UnallowedMovementException, OccupiedCellException {
-		Direction[] allowedMoves = { Direction.DOWN, Direction.LEFT, Direction.RIGHT, Direction.UP };
-		move(1, r, allowedMoves);
+		move(1, r, getAllowedDirections());
 	}
 	
 	public boolean inBounds(int i, int j) {
@@ -69,13 +68,31 @@ public class Super extends ActivatablePowerHero {
 		ArrayList<Move> allowedAbilityMoves = new ArrayList<>();
 		for(Direction d : getAllowedDirections()) {
 			Point p1 = getMoveLocation(getPosI(), getPosJ(), 1, d, false);
-			Point p2 = getMoveLocation(getPosI(), getPosJ(), 1, d, false);
+			Point p2 = getMoveLocation(getPosI(), getPosJ(), 2, d, false);
 			if(inBounds(p1.x, p1.y))
 				allowedAbilityMoves.add(new Move(p1, d));
 			if(inBounds(p2.x, p2.y))
 				allowedAbilityMoves.add(new Move(p2, d));
 		}
 		return allowedAbilityMoves;
+	}
+	
+	public boolean isAllowdAbility(Point p) {
+		ArrayList<Move> allowedAbilityMoves = getAllowedAbilityMoves();
+		for (Move m : allowedAbilityMoves) {
+			if (m.samePoint(p))
+				return true;
+		}
+		return false;
+	}
+	
+	public Direction mapToAbilityDirection(Point p) {
+		ArrayList<Move> allowedAbilityMoves = getAllowedAbilityMoves();
+		for (Move m : allowedAbilityMoves) {
+			if (m.samePoint(p))
+				return m.getDirection();
+		}
+		return null;
 	}
 
 	@Override

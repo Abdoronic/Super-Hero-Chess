@@ -1,111 +1,83 @@
 package view;
 
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import model.game.Game;
-import model.pieces.Piece;
-import model.pieces.heroes.Medic;
-import model.pieces.heroes.Ranged;
-import model.pieces.heroes.Super;
-import model.pieces.heroes.Tech;
-import view.customGUI.BoardCell;
+import controller.Controller;
 
 @SuppressWarnings("serial")
-public class BoardPanel extends JPanel implements ActionListener {
+public class BoardPanel extends JPanel {
+	
+	private Controller controller;
 
-	private Game game;
-
-	private static Piece selectedPiece;
-	private static Piece targetPiece;
-	private static Boolean isAbility;
-	private static Boolean selectedRanged;
-	private static Boolean selectedSuper;
-	private static Boolean hackedPiece;
-	private static Boolean restorePiece;
-	private static Boolean teleporting;
-  
 	private BoardCell[][] board = new BoardCell[6][7];
 
-	public BoardPanel(Game game) {
-		this.game = game;
-//		this.selectedPiece = null;
+	public BoardPanel(Controller controller) {
+		this.controller = controller;
 		setLayout(new GridLayout(6, 7));
-		for (int i = 0; i < board.length; i++) {
-			for (int j = 0; j < board[i].length; j++) {
-				board[i][j] = new BoardCell(game, i, j);
+		for (int i = board.length - 1; i >= 0; i--) {
+			for (int j = board[i].length - 1; j >= 0; j--) {
+				board[i][j] = new BoardCell(controller, i, j);
 				BoardCell cell = board[i][j];
-				cell.addActionListener(this);
+				cell.addActionListener(controller);
 				add(cell);
 				cell.paintPiece();
 			}
 		}
 		setVisible(true);
 	}
-
-	public Piece getPieceAt(int i, int j) {
-		return game.getCellAt(j, i).getPiece();
-	}
-
-	public boolean isEmpty(int i, int j) {
-		return getPieceAt(i, j) == null;
-	}
 	
-	public void SelectPiece(BoardCell c) { 
-		selectedPiece.setPosI(c.getI());
-		selectedPiece.setPosJ(c.getJ());
+	public void refresh() {
+		removeAll();
+		setLayout(new GridLayout(6, 7));
+		for (int i = board.length - 1; i >= 0; i--) {
+			for (int j = board[i].length - 1; j >= 0; j--) {
+				board[i][j] = new BoardCell(controller, i, j);
+				BoardCell cell = board[i][j];
+				cell.addActionListener(controller);
+				add(cell);
+				cell.paintPiece();
+			}
+		}
+		this.revalidate();
+		this.repaint();
+		setVisible(true);
+	}
+
+
+	public void lightUpAvailableMoves() {
+		// makes green cells
+	}
+
+	public void lightUpAvailableAbilityMoves() {
+		// makes orange cells
+	}
+
+	public void lightOffAvailableMoves() {
+		// makes green cells
+	}
+
+	public void lightOffAvailableAbilityMoves() {
+		// makes orange cells
+	}
+
+	public void doAttackAnimation() {
 		
 	}
 
-	public static void SelectAbility(Piece p) {
-		if (p instanceof Medic) {
-			ArrayList<Piece> dead = p.getOwner().getDeadCharacters();
-			Object[] graveyard = new Object[dead.size()];
-			for (int i = 0; i < dead.size(); i++) {
-				graveyard[i] = dead.get(i).getName();
-			}
-			JPanel revive = new JPanel();
-			revive.add(new JLabel("Please select a dead character to revive"));
-			int pos = JOptionPane.showOptionDialog(null, revive, "Medic", JOptionPane.OK_CANCEL_OPTION,
-					JOptionPane.PLAIN_MESSAGE, null, graveyard, null);
-
-			Piece revived = dead.get(pos);
-			selectedPiece = revived;
-
-		}
-		if (p instanceof Ranged) {
-			selectedRanged = true;
-		}
-		if (p instanceof Tech) {
-			Object[] TechAbilities = { "Hack Enemy", "Restore ability", "Teleport" };
-			JPanel abilities = new JPanel();
-			abilities.add(new JLabel("Please a Tech ability"));
-			int pos = JOptionPane.showOptionDialog(null, abilities, "Tech", JOptionPane.OK_CANCEL_OPTION,
-					JOptionPane.PLAIN_MESSAGE, null, TechAbilities, null);
-			if (pos == 0) {
-				hackedPiece = true;
-			}
-			if (pos == 1) {
-				restorePiece = true;
-			}
-			if (pos == 2) {
-				teleporting =true;
-			}
-		}
-		if (p instanceof Super) {
-			selectedSuper = true;
-		}
+	public void doMoveAnimation() {
+		
 	}
-	
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		System.out.println("here");
 
+	public void playSuperAnimation() {
+		
+	}
+
+	public void playRangedAnimation() {
+		
+	}
+
+	public void playMedicAnimation() {
+		
 	}
 }

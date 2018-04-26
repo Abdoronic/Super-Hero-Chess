@@ -19,8 +19,6 @@ public class SideKickP1 extends SideKick {
 
 	@Override
 	public void move(Direction r) throws WrongTurnException, UnallowedMovementException, OccupiedCellException {
-		Direction[] allowedMoves = { Direction.LEFT, Direction.RIGHT, Direction.UP, Direction.UPLEFT,
-				Direction.UPRIGHT };
-		move(1, r, allowedMoves);
+		move(1, r, getAllowedDirections());
 	}
 }

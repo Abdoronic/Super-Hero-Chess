@@ -2,7 +2,6 @@ package model.pieces.heroes;
 
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import exceptions.InvalidPowerDirectionException;
 import exceptions.InvalidPowerTargetException;
@@ -20,15 +19,11 @@ public class Ranged extends ActivatablePowerHero {
 
 	public Ranged(Player player, Game game, String name) {
 		super(player, game, name);
-		setAllowedDirections(new ArrayList<>(Arrays.asList(Direction.DOWN, Direction.DOWNLEFT, Direction.DOWNRIGHT, Direction.LEFT,
-				Direction.RIGHT, Direction.UP, Direction.UPLEFT, Direction.UPRIGHT)));
 	}
 
 	@Override
 	public void move(Direction r) throws WrongTurnException, UnallowedMovementException, OccupiedCellException {
-		Direction[] allowedMoves = { Direction.DOWN, Direction.DOWNLEFT, Direction.DOWNRIGHT, Direction.LEFT,
-				Direction.RIGHT, Direction.UP, Direction.UPLEFT, Direction.UPRIGHT };
-		move(1, r, allowedMoves);
+		move(1, r, getAllowedDirections());
 	}
 
 	public void usePower(Direction d, Piece target, Point newPos) throws WrongTurnException, PowerAlreadyUsedException, InvalidPowerDirectionException, InvalidPowerTargetException {
@@ -110,6 +105,24 @@ public class Ranged extends ActivatablePowerHero {
 			}
 		}
 		return allowedAbilityMoves;
+	}
+	
+	public boolean isAllowdAbility(Point p) {
+		ArrayList<Move> allowedAbilityMoves = getAllowedAbilityMoves();
+		for (Move m : allowedAbilityMoves) {
+			if (m.samePoint(p))
+				return true;
+		}
+		return false;
+	}
+	
+	public Direction mapToAbilityDirection(Point p) {
+		ArrayList<Move> allowedAbilityMoves = getAllowedAbilityMoves();
+		for (Move m : allowedAbilityMoves) {
+			if (m.samePoint(p))
+				return m.getDirection();
+		}
+		return null;
 	}
 
 	public String toString() {
