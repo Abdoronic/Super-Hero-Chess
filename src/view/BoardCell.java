@@ -4,7 +4,7 @@ package view;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
-import model.game.Game;
+import controller.Controller;
 import model.pieces.Piece;
 import model.pieces.sidekicks.SideKick;
 import view.Assets.Assets;
@@ -12,21 +12,21 @@ import view.Assets.Assets;
 @SuppressWarnings("serial")
 public class BoardCell extends JButton {
 
-	private Game game;
+	private Controller controller;
 	private int i;
 	private int j;
 
-	public BoardCell(Game game, int i, int j) {
+	public BoardCell(Controller controller, int i, int j) {
 		setBorderPainted(false);
 		setOpaque(false);
 		setFocusable(false);
-		this.game = game;
+		this.controller = controller;
 		this.i = i;
 		this.j = j;
 	}
 
 	public Piece getPiece() {
-		return game.getCellAt(j, i).getPiece();
+		return controller.getGame().getCellAt(j, i).getPiece();
 	}
 
 	public boolean isEmpty() {
@@ -37,7 +37,7 @@ public class BoardCell extends JButton {
 		if (!isEmpty()) {
 			String name = getPiece().getClass().getSimpleName();
 			if (!(getPiece() instanceof SideKick))
-				if (getPiece().getOwner() == game.getPlayer1())
+				if (getPiece().getOwner() == controller.getGame().getPlayer1())
 					name += "P1";
 				else
 					name += "P2";
