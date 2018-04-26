@@ -39,9 +39,10 @@ public class BoardPanel extends JPanel {
 				cell.paintPiece();
 			}
 		}
-		this.revalidate();
-		this.repaint();
-		setVisible(true);
+		controller.getSuperHeroChess().getPayloadPanel().updatePayload(controller);
+//		this.revalidate();
+//		this.repaint();
+//		setVisible(true);
 	}
 
 

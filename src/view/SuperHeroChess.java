@@ -28,7 +28,7 @@ public class SuperHeroChess extends JFrame{
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setBounds(SCREEN_WIDTH/2 - WIDTH/2, SCREEN_HEIGHT/2 - HEIGHT/2, WIDTH, HEIGHT);
 		setLayout(new BorderLayout());
-		payloadPanel = new PayloadPanel();
+		payloadPanel = new PayloadPanel(controller);
 		infoPanel = new InfoPanel(controller);
 		boardPanel = new BoardPanel(controller);
 		

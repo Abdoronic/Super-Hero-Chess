@@ -34,6 +34,10 @@ public class Controller implements ActionListener {
 	private PayloadPanel payloadPanel;
 	private InfoPanel infoPanel;
 
+	public SuperHeroChess getSuperHeroChess() {
+		return superHeroChess;
+	}
+
 	private static Piece selectedPiece;
 	private static Piece targetPiece;
 	private static Piece teleportedPiece;
@@ -78,6 +82,7 @@ public class Controller implements ActionListener {
 				return;
 			if (isFriendly(sourcePiece)) {
 				select(sourcePiece);
+				this.getSuperHeroChess().getInfoPanel().updateInfoPanel(this);
 				System.out.println("selected: " + sourcePiece);
 			} else {
 				superHeroChess.displayMessage("Can not select an enemy Piece");
@@ -92,6 +97,7 @@ public class Controller implements ActionListener {
 			System.out.println("enterd moving block");
 			if (!isEmpty(cell) && isFriendly(sourcePiece)) {
 				select(sourcePiece);
+				this.getSuperHeroChess().getInfoPanel().updateInfoPanel(this);
 				System.out.println("selected again: " + sourcePiece);
 			} else if (selectedPiece.isAllowdMove(sourcePoint)) {
 				System.out.println("Ahe ha tmove 5alas");
