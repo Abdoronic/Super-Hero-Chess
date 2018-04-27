@@ -1,6 +1,6 @@
 package controller;
 
-import java.awt.Font;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -35,12 +35,16 @@ public class Controller implements ActionListener {
 
 	private Game game;
 	
+	private Assets assets;
+	
 	private StartPage startPage;
 	private StartMenu startMenu;
 	private SuperHeroChess superHeroChess;
 	private BoardPanel boardPanel;
 	private PayloadPanel payloadPanel;
 	private InfoPanel infoPanel;
+	
+	private ArrayList<Image> characters;
 
 	public SuperHeroChess getSuperHeroChess() {
 		return superHeroChess;
@@ -57,6 +61,7 @@ public class Controller implements ActionListener {
 	private static boolean teleporting;
 	
 	public Controller() {
+		assets = new Assets();
 		startPage = new StartPage(this);
 	}
 	
@@ -386,15 +391,8 @@ public class Controller implements ActionListener {
 		}
 	}
 	
-	public Font getGameFont(Float size) {
-		Font font = null;
-		try {
-			font = Font.createFont(Font.TRUETYPE_FONT, Assets.class.getResourceAsStream("gameFont.ttf"));
-		} catch(Exception ex) {
-			System.out.println("File not Found!");
-		}
-		font = font.deriveFont(size);
-		return font;
+	public ArrayList<Image> getCharacters() {
+		return characters;
 	}
 
 	public Game getGame() {
@@ -403,6 +401,10 @@ public class Controller implements ActionListener {
 	
 	public Piece getSelectedPiece() {
 		return selectedPiece;
+	}
+	
+	public Assets getAssets() {
+		return assets;
 	}
 
 	public static void main(String[] args) {

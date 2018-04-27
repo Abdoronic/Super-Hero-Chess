@@ -41,12 +41,12 @@ public class StartMenu extends JFrame{
 		textBox2 = new JTextField("");
 		
 		JLabel label1 = new JLabel("Enter The First Player's Name:\n");
-		label1.setFont(controller.getGameFont(24f));
+		label1.setFont(controller.getAssets().getGameFont(24f));
 		inputPanel.add(label1);
 		inputPanel.add(textBox1);
 		
 		JLabel label2 = new JLabel("Enter The Second Player's Name:\n");
-		label2.setFont(controller.getGameFont(24f));
+		label2.setFont(controller.getAssets().getGameFont(24f));
 		inputPanel.add(label2);
 		inputPanel.add(textBox2);
 		inputPanel.add(new JLabel("\n\n"));

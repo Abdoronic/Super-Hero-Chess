@@ -15,16 +15,17 @@ public class SuperHeroChess extends JFrame{
 	private InfoPanel infoPanel;
 	private BoardPanel boardPanel;
 	
-	final static int WIDTH = 1280;
-	final static int HEIGHT = 720;
 	final static int SCREEN_WIDTH = Toolkit.getDefaultToolkit().getScreenSize().width;
 	final static int SCREEN_HEIGHT = Toolkit.getDefaultToolkit().getScreenSize().height;
-	
+		
 	public SuperHeroChess(Controller controller) {
 		setTitle("Super Hero Chess");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setBounds(SCREEN_WIDTH/2 - WIDTH/2, SCREEN_HEIGHT/2 - HEIGHT/2, WIDTH, HEIGHT);
+//		setBounds(SCREEN_WIDTH/2 - WIDTH/2, SCREEN_HEIGHT/2 - HEIGHT/2, WIDTH, HEIGHT);
+		setExtendedState(JFrame.MAXIMIZED_BOTH); 
+//		setUndecorated(true);
 		setLayout(new BorderLayout());
+		
 		payloadPanel = new PayloadPanel(controller);
 		infoPanel = new InfoPanel(controller);
 		boardPanel = new BoardPanel(controller);
@@ -32,6 +33,7 @@ public class SuperHeroChess extends JFrame{
 		add(payloadPanel, BorderLayout.NORTH);
 		add(boardPanel, BorderLayout.CENTER);
 		add(infoPanel, BorderLayout.SOUTH);
+		
 		pack();
 		setVisible(true);
 	}
@@ -53,5 +55,4 @@ public class SuperHeroChess extends JFrame{
 		return boardPanel;
 	}
 	
-
 }

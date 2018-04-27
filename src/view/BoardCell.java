@@ -2,6 +2,7 @@ package view;
 
 
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.LayoutManager;
 
 import javax.swing.ImageIcon;
@@ -20,6 +21,9 @@ public class BoardCell extends JPanel {
 	private Controller controller;
 	private BoardButton button;
 	private JLabel background;
+	
+	private int cellWidth;
+	private int cellHeight;
 	private int i;
 	private int j;
 
@@ -27,10 +31,15 @@ public class BoardCell extends JPanel {
 		this.controller = controller;
 		this.i = i;
 		this.j = j;
+		
 		LayoutManager overlay = new OverlayLayout(this);
 		setLayout(overlay);
+		
+		cellWidth = controller.getAssets().getCellWidth();
+		cellHeight = controller.getAssets().getCellHeight();
+		
 		button = new BoardButton(controller, i, j);
-		button.setMaximumSize(new Dimension(200, 150));
+		button.setMaximumSize(new Dimension(cellWidth, cellHeight));
 		button.addActionListener(controller);
 		button.setBorderPainted(false);
 		button.setContentAreaFilled(false);
@@ -38,10 +47,14 @@ public class BoardCell extends JPanel {
 		button.setFocusable(false);
 		add(button);
 		
+		ImageIcon backGround = new ImageIcon(Assets.class.getResource("background.jpg"));
+		Image scaledBackGround = backGround.getImage().getScaledInstance(cellWidth, cellHeight,Image.SCALE_DEFAULT);
+		
 		background = new JLabel();
-		background.setMaximumSize(new Dimension(200, 150));
-		background.setIcon(new ImageIcon(Assets.class.getResource("background.jpg")));
+		background.setMaximumSize(new Dimension(cellWidth, cellHeight));
+		background.setIcon(new ImageIcon(scaledBackGround));
 		add(background);
+		
 		setVisible(true);
 	}
 
@@ -61,8 +74,9 @@ public class BoardCell extends JPanel {
 					name += "P1";
 				else
 					name += "P2";
-			name += ".gif";
-			button.setIcon(new ImageIcon(Assets.class.getResource(name)));
+			
+			Image scaledCharacter = controller.getAssets().getCharacter(name);
+			button.setIcon(new ImageIcon(scaledCharacter));
 		}
 	}
 
