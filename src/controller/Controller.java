@@ -1,5 +1,6 @@
 package controller;
 
+import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -28,6 +29,7 @@ import view.StartButton;
 import view.StartMenu;
 import view.StartPage;
 import view.SuperHeroChess;
+import view.Assets.Assets;
 
 public class Controller implements ActionListener {
 
@@ -382,6 +384,17 @@ public class Controller implements ActionListener {
 			superHeroChess.dispose();
 			startMenu = new StartMenu(this);
 		}
+	}
+	
+	public Font getGameFont(Float size) {
+		Font font = null;
+		try {
+			font = Font.createFont(Font.TRUETYPE_FONT, Assets.class.getResourceAsStream("gameFont.ttf"));
+		} catch(Exception ex) {
+			System.out.println("File not Found!");
+		}
+		font = font.deriveFont(size);
+		return font;
 	}
 
 	public Game getGame() {
