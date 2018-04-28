@@ -48,6 +48,7 @@ public class Controller implements ActionListener {
 	private int[][] colorMatrix;
 	
 	private static Piece selectedPiece;
+	private static Piece infoPiece;
 	private static Piece targetPiece;
 	private static Piece teleportedPiece;
 	private static boolean isAbility;
@@ -119,6 +120,8 @@ public class Controller implements ActionListener {
 			if (isFriendly(sourcePiece)) {
 				select(sourcePiece);
 			} else {
+				infoPiece = sourcePiece;
+				infoPanel.updateInfoPanel();
 				superHeroChess.displayMessage("Can not select an enemy Piece");
 			}
 			refresh();
@@ -142,6 +145,9 @@ public class Controller implements ActionListener {
 				} catch (Exception ex) {
 					superHeroChess.displayMessage(ex.getMessage());
 				}
+			} else if (!isEmpty(cell) && !isFriendly(sourcePiece)){
+				infoPiece = sourcePiece;
+				infoPanel.updateInfoPanel();
 			}
 			refresh();
 			return; // end action
@@ -281,6 +287,7 @@ public class Controller implements ActionListener {
 
 	public void select(BoardCell c) {
 		selectedPiece = c.getPiece();
+		infoPiece = c.getPiece();
 		lightOffAvailableMoves();
 		lightUpAvailableMoves(selectedPiece);
 		infoPanel.updateInfoPanel();
@@ -288,6 +295,7 @@ public class Controller implements ActionListener {
 
 	public void select(Piece p) {
 		selectedPiece = p;
+		infoPiece = p;
 		lightOffAvailableMoves();
 		lightUpAvailableMoves(selectedPiece);
 		infoPanel.updateInfoPanel();
@@ -360,6 +368,7 @@ public class Controller implements ActionListener {
 
 	public void reset() {
 		selectedPiece = null;
+		infoPiece = null;
 		targetPiece = null;
 		isAbility = false;
 		selectedRanged = false;
@@ -421,6 +430,10 @@ public class Controller implements ActionListener {
 	
 	public int getColorAt(int i, int j) {
 		return colorMatrix[i][j];
+	}
+
+	public Piece getInfoPiece() {
+		return infoPiece;
 	}
 
 	public void lightUpAvailableMoves(Piece piece) {

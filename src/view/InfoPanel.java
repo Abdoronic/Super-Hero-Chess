@@ -94,7 +94,7 @@ public class InfoPanel extends BackPanel {
 	}
 
 	public void updateInfoPanel() {
-		Piece p = controller.getSelectedPiece();
+		Piece p = controller.getInfoPiece();
 		name.setText("   Name: ");
 		name.setForeground(Color.WHITE);
 		nameDesc.setText(p.getName());
