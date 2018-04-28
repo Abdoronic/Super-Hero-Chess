@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -22,6 +23,8 @@ public class PayloadPanel extends BackPanel{
 		p1 = new JLabel();
 		p2 = new JLabel();
 		curName = new JLabel();
+		curName.setFont(controller.getAssets().getGameFont(24f));
+		curName.setForeground(Color.WHITE);
 		p1.setIcon(new ImageIcon(controller.getAssets().getPayload("0p1")));
 		p2.setIcon(new ImageIcon(controller.getAssets().getPayload("0p2")));
 		controller.getGame();

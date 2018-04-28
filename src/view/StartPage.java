@@ -23,6 +23,10 @@ public class StartPage extends JFrame{
 		startButton = new JButton();
 		startButton.setIcon(controller.getAssets().getStartPageIcon());
 		startButton.addActionListener(controller);
+		startButton.setBorderPainted(false);
+		startButton.setContentAreaFilled(false);
+		startButton.setOpaque(false);
+		startButton.setFocusable(false);
 		
 		int width = startButton.getIcon().getIconWidth();
 		int height = startButton.getIcon().getIconHeight();
