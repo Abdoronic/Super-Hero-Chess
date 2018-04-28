@@ -14,6 +14,9 @@ public class Assets {
 	private int frameHeight;
 	private int cellWidth;
 	private int cellHeight;
+	private Image plainBackground;
+	private Image greenBackground;
+	private Image yellowBackground;
 	TreeMap<String, Image> characters;
 	
 	public Assets() {
@@ -23,6 +26,7 @@ public class Assets {
 		cellWidth = frameWidth/7;
 		cellHeight = frameHeight/7;
 		loadCharacters();
+		loadBackgrounds();
 	}
 	
 	public Font getGameFont(Float size) {
@@ -70,12 +74,36 @@ public class Assets {
 				"SuperP1", "SuperP2", "TechP1", "TechP2"};
 		for(String name : names) {
 			character = new ImageIcon(Assets.class.getResource(name + ".gif"));
-			int widthMargin = 0;
+			int widthMargin = 50;
 			int heightMargin = 0;
 			scaledCharacter = character.getImage().getScaledInstance
 					(cellWidth - widthMargin, cellHeight - heightMargin,Image.SCALE_DEFAULT);
 			characters.put(name, scaledCharacter);
 		}
+	}
+	
+	public void loadBackgrounds() {
+		ImageIcon backGround;
+		backGround = new ImageIcon(Assets.class.getResource("plainBackground.jpg"));
+		plainBackground = backGround.getImage().getScaledInstance(cellWidth, cellHeight,Image.SCALE_DEFAULT);
+		
+		backGround = new ImageIcon(Assets.class.getResource("greenBackground.jpg"));
+		greenBackground = backGround.getImage().getScaledInstance(cellWidth, cellHeight,Image.SCALE_DEFAULT);
+		
+		backGround = new ImageIcon(Assets.class.getResource("yellowBackground.jpg"));
+		yellowBackground = backGround.getImage().getScaledInstance(cellWidth, cellHeight,Image.SCALE_DEFAULT);
+	}
+
+	public Image getPlainBackground() {
+		return plainBackground;
+	}
+
+	public Image getGreenBackground() {
+		return greenBackground;
+	}
+
+	public Image getYellowBackground() {
+		return yellowBackground;
 	}
 
 }

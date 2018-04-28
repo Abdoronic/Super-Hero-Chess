@@ -38,22 +38,9 @@ public class BoardPanel extends JPanel {
 			}
 		}
 	}
-
-
-	public void lightUpAvailableMoves() {
-		// makes green cells
-	}
-
-	public void lightUpAvailableAbilityMoves() {
-		// makes orange cells
-	}
-
-	public void lightOffAvailableMoves() {
-		// makes green cells
-	}
-
-	public void lightOffAvailableAbilityMoves() {
-		// makes orange cells
+	
+	public BoardCell getBoardCellAt(int i, int j) {
+		return board[i][j];
 	}
 
 	public void doAttackAnimation() {

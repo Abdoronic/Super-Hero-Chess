@@ -13,7 +13,6 @@ import javax.swing.OverlayLayout;
 import controller.Controller;
 import model.pieces.Piece;
 import model.pieces.sidekicks.SideKick;
-import view.Assets.Assets;
 
 @SuppressWarnings("serial")
 public class BoardCell extends JPanel {
@@ -46,13 +45,9 @@ public class BoardCell extends JPanel {
 		button.setOpaque(false);
 		button.setFocusable(false);
 		add(button);
-		
-		ImageIcon backGround = new ImageIcon(Assets.class.getResource("background.jpg"));
-		Image scaledBackGround = backGround.getImage().getScaledInstance(cellWidth, cellHeight,Image.SCALE_DEFAULT);
-		
+				
 		background = new JLabel();
 		background.setMaximumSize(new Dimension(cellWidth, cellHeight));
-		background.setIcon(new ImageIcon(scaledBackGround));
 		add(background);
 		
 		setVisible(true);
@@ -67,6 +62,14 @@ public class BoardCell extends JPanel {
 	}
 
 	public void paintPiece() {
+		int color = controller.getColorAt(i, j);
+		if(color == 2) {
+			background.setIcon(new ImageIcon(controller.getAssets().getYellowBackground()));
+		} else if(color == 1) {
+			background.setIcon(new ImageIcon(controller.getAssets().getGreenBackground()));
+		} else {
+			background.setIcon(new ImageIcon(controller.getAssets().getPlainBackground()));
+		}
 		if (!isEmpty()) {
 			String name = getPiece().getClass().getSimpleName();
 			if (!(getPiece() instanceof SideKick))

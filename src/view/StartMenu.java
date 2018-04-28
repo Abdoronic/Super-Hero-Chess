@@ -32,7 +32,7 @@ public class StartMenu extends JFrame{
 	}
 	
 	public StartMenu(Controller controller) {
-		setUndecorated(true);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setBounds(SCREEN_WIDTH/2 - WIDTH/2, SCREEN_HEIGHT/2 - HEIGHT/2, WIDTH, HEIGHT);
 		setLayout(new BorderLayout());
 		JPanel inputPanel = new JPanel();
