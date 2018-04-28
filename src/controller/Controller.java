@@ -12,13 +12,16 @@ import javax.swing.JPanel;
 
 import model.game.Direction;
 import model.game.Game;
+import model.game.Move;
 import model.game.Player;
 import model.pieces.Piece;
 import model.pieces.heroes.ActivatablePowerHero;
+import model.pieces.heroes.Armored;
 import model.pieces.heroes.Medic;
 import model.pieces.heroes.Ranged;
 import model.pieces.heroes.Super;
 import model.pieces.heroes.Tech;
+import view.BoardButton;
 import view.BoardCell;
 import view.BoardPanel;
 import view.InfoPanel;
@@ -27,10 +30,13 @@ import view.StartButton;
 import view.StartMenu;
 import view.StartPage;
 import view.SuperHeroChess;
+import view.Assets.Assets;
 
 public class Controller implements ActionListener {
 
 	private Game game;
+	
+	private Assets assets;
 	
 	private StartPage startPage;
 	private StartMenu startMenu;
@@ -38,11 +44,9 @@ public class Controller implements ActionListener {
 	private BoardPanel boardPanel;
 	private PayloadPanel payloadPanel;
 	private InfoPanel infoPanel;
-
-	public SuperHeroChess getSuperHeroChess() {
-		return superHeroChess;
-	}
-
+	
+	private int[][] colorMatrix;
+	
 	private static Piece selectedPiece;
 	private static Piece targetPiece;
 	private static Piece teleportedPiece;
@@ -54,6 +58,8 @@ public class Controller implements ActionListener {
 	private static boolean teleporting;
 	
 	public Controller() {
+		assets = new Assets();
+		colorMatrix = new int[6][7];
 		startPage = new StartPage(this);
 	}
 	
@@ -87,17 +93,17 @@ public class Controller implements ActionListener {
 		}
 
 		// Checking if ability button is pressed
-		if (!(sourceButton instanceof BoardCell)) {
+		if (!(sourceButton instanceof BoardButton)) {
 			if (selectedPiece == null) {
 				superHeroChess.displayMessage("You need to select a Hero to use their ability");
 			} else {
-				System.out.println("will select Ability");
 				selectAbility(selectedPiece);
 			}
+			refresh();
 			return; // stop action
 		}
 
-		BoardCell cell = (BoardCell) sourceButton;
+		BoardButton cell = (BoardButton) sourceButton;
 		Piece sourcePiece = cell.getPiece();
 		Point sourcePoint = new Point(cell.getJ(), cell.getI());
 
@@ -107,11 +113,8 @@ public class Controller implements ActionListener {
 				return;
 			if (isFriendly(sourcePiece)) {
 				select(sourcePiece);
-				this.getSuperHeroChess().getInfoPanel().updateInfoPanel(this);
-				System.out.println("selected: " + sourcePiece);
 			} else {
 				superHeroChess.displayMessage("Can not select an enemy Piece");
-				System.out.println("An enemyyyyy");
 			}
 			refresh();
 			return; // stop action
@@ -119,13 +122,9 @@ public class Controller implements ActionListener {
 
 		// Doing a move or selecting another piece
 		if (!isAbility) {
-			System.out.println("enterd moving block");
 			if (!isEmpty(cell) && isFriendly(sourcePiece)) {
 				select(sourcePiece);
-				this.getSuperHeroChess().getInfoPanel().updateInfoPanel(this);
-				System.out.println("selected again: " + sourcePiece);
 			} else if (selectedPiece.isAllowdMove(sourcePoint)) {
-				System.out.println("Ahe ha tmove 5alas");
 				if (isEmpty(cell)) {
 					boardPanel.doMoveAnimation();
 				} else {
@@ -134,7 +133,6 @@ public class Controller implements ActionListener {
 				}
 				try {
 					selectedPiece.move(selectedPiece.mapToMoveDirection(sourcePoint));
-					System.out.println("Moved");
 					reset();
 				} catch (Exception ex) {
 					superHeroChess.displayMessage(ex.getMessage());
@@ -222,7 +220,7 @@ public class Controller implements ActionListener {
 				resetAbilities();
 				return;
 			}
-			if (isFriendly(sourcePiece)) {
+			if (isFriendly(sourcePiece) && selectedPiece != sourcePiece) {
 				try {
 					techPiece.usePower(null, sourcePiece, null);
 					reset();
@@ -241,6 +239,8 @@ public class Controller implements ActionListener {
 					return;
 				}
 				teleportedPiece = sourcePiece;
+				lightOffAvailableAbilityMoves();
+				lightUpEmptyCells();
 			} else {
 				if (isEmpty(cell)) {
 					try {
@@ -266,7 +266,7 @@ public class Controller implements ActionListener {
 		return getPieceAt(i, j) == null;
 	}
 
-	public boolean isEmpty(BoardCell cell) {
+	public boolean isEmpty(BoardButton cell) {
 		return cell.getPiece() == null;
 	}
 
@@ -276,12 +276,16 @@ public class Controller implements ActionListener {
 
 	public void select(BoardCell c) {
 		selectedPiece = c.getPiece();
-		boardPanel.lightUpAvailableMoves();
+		lightOffAvailableMoves();
+		lightUpAvailableMoves(selectedPiece);
+		infoPanel.updateInfoPanel();
 	}
 
 	public void select(Piece p) {
 		selectedPiece = p;
-		boardPanel.lightUpAvailableMoves();
+		lightOffAvailableMoves();
+		lightUpAvailableMoves(selectedPiece);
+		infoPanel.updateInfoPanel();
 	}
 
 	public void selectAbility(Piece p) {
@@ -292,7 +296,7 @@ public class Controller implements ActionListener {
 			return;
 		}
 		isAbility = true;
-		boardPanel.lightOffAvailableMoves();
+		lightOffAvailableMoves();
 		if (p instanceof Medic) {
 			ArrayList<Piece> dead = p.getOwner().getDeadCharacters();
 			if (dead.size() == 0) {
@@ -314,11 +318,11 @@ public class Controller implements ActionListener {
 	        }
 			Piece revived = dead.get(pos);
 			targetPiece = revived;
-			boardPanel.lightUpAvailableAbilityMoves();
+			lightUpAvailableAbilityMoves(p);
 		}
 		if (p instanceof Ranged) {
 			selectedRanged = true;
-			boardPanel.lightUpAvailableAbilityMoves();
+			lightUpAvailableAbilityMoves(p);
 		}
 		if (p instanceof Tech) {
 			Object[] TechAbilities = { "Hack Enemy", "Restore ability", "Teleport" };
@@ -326,12 +330,18 @@ public class Controller implements ActionListener {
 			abilities.add(new JLabel("Please choose a Tech ability"));
 			int pos = JOptionPane.showOptionDialog(superHeroChess, abilities, "Tech", JOptionPane.OK_CANCEL_OPTION,
 					JOptionPane.PLAIN_MESSAGE, null, TechAbilities, null);
-			if (pos == 0)
+			if (pos == 0) {
 				hackedPiece = true;
-			if (pos == 1)
+				lightUpHackablePieces((Tech)p);
+			}
+			if (pos == 1) {
 				restorePiece = true;
-			if (pos == 2)
+				lightUpRestorablePieces((Tech)p);
+			}
+			if (pos == 2) {
 				teleporting = true;
+				lightUpFriendly((Tech)p);
+			}
 			if (pos == JOptionPane.CLOSED_OPTION) {
 				resetAbilities();
 	            return;
@@ -339,7 +349,7 @@ public class Controller implements ActionListener {
 		}
 		if (p instanceof Super) {
 			selectedSuper = true;
-			boardPanel.lightUpAvailableAbilityMoves();
+			lightUpAvailableAbilityMoves(p);
 		}
 	}
 
@@ -353,7 +363,7 @@ public class Controller implements ActionListener {
 		restorePiece = false;
 		teleporting = false;
 		teleportedPiece = null;
-		boardPanel.lightOffAvailableMoves();
+		lightOffAvailableMoves();
 	}
 
 	public void resetAbilities() {
@@ -365,10 +375,12 @@ public class Controller implements ActionListener {
 		restorePiece = false;
 		teleporting = false;
 		teleportedPiece = null;
+		lightOffAvailableAbilityMoves();
 	}
 	
 	public void refresh() {
 		boardPanel.refresh();
+		payloadPanel.updatePayload();
 		if(game.getPlayer1().getPayloadPos() >= 6) {
 			superHeroChess.displayMessage(game.getPlayer1().getName() + " Won!");
 			superHeroChess.setVisible(false);
@@ -388,6 +400,113 @@ public class Controller implements ActionListener {
 	
 	public Piece getSelectedPiece() {
 		return selectedPiece;
+	}
+	
+	public Assets getAssets() {
+		return assets;
+	}
+	
+	public SuperHeroChess getSuperHeroChess() {
+		return superHeroChess;
+	}
+
+	public BoardPanel getBoardPanel() {
+		return boardPanel;
+	}
+	
+	public int getColorAt(int i, int j) {
+		return colorMatrix[i][j];
+	}
+
+	public void lightUpAvailableMoves(Piece piece) {
+		for(Move m : piece.getAllowedMoves())
+			colorMatrix[(int)m.getPoint().getY()][(int)m.getPoint().getX()] = 1;
+	}
+
+	public void lightUpAvailableAbilityMoves(Piece piece) {
+		ArrayList<Move> allowedAbilityMoves = null;
+		if(piece instanceof Medic) {
+			allowedAbilityMoves = ((Medic)piece).getAllowedAbilityMoves();
+		} else if(piece instanceof Ranged) {
+			allowedAbilityMoves = ((Ranged)piece).getAllowedAbilityMoves();
+		} else if(piece instanceof Super) {
+			allowedAbilityMoves = ((Super)piece).getAllowedAbilityMoves();
+		} else {
+			return;
+		}
+		for(Move m : allowedAbilityMoves)
+			colorMatrix[(int)m.getPoint().getY()][(int)m.getPoint().getX()] = 2;
+	}
+
+	public void lightOffAvailableMoves() {
+		for (int i = 0; i < colorMatrix.length; i++)
+			for (int j = 0; j < colorMatrix[i].length; j++)
+				colorMatrix[i][j] = 0;
+	}
+
+	public void lightOffAvailableAbilityMoves() {
+		for (int i = 0; i < colorMatrix.length; i++)
+			for (int j = 0; j < colorMatrix[i].length; j++)
+				colorMatrix[i][j] = 0;
+	}
+	
+	public void lightUpHackablePieces(Tech tech) {
+		for (int i = 0; i < colorMatrix.length; i++) {
+			for (int j = 0; j < colorMatrix.length; j++) {
+				BoardCell cell = boardPanel.getBoardCellAt(i, j);
+				Piece p = cell.getPiece();
+				
+				if(p != null && !tech.isFriendly(p) 
+						&& p instanceof ActivatablePowerHero 
+						&& !((ActivatablePowerHero)p).isPowerUsed())
+					colorMatrix[i][j] = 2;
+				
+				if(p != null && !tech.isFriendly(p)  
+						&& p instanceof Armored 
+						&& ((Armored)p).isArmorUp())
+					colorMatrix[i][j] = 2;
+			}
+		}
+	}
+	
+	public void lightUpRestorablePieces(Tech tech) {
+		for (int i = 0; i < colorMatrix.length; i++) {
+			for (int j = 0; j < colorMatrix.length; j++) {
+				BoardCell cell = boardPanel.getBoardCellAt(i, j);
+				Piece p = cell.getPiece();
+				
+				if(p != null && tech.isFriendly(p)  
+						&& p instanceof ActivatablePowerHero 
+						&& ((ActivatablePowerHero)p).isPowerUsed())
+					colorMatrix[i][j] = 2;
+				
+				if(p != null && tech.isFriendly(p)  
+						&& p instanceof Armored 
+						&& !((Armored)p).isArmorUp())
+					colorMatrix[i][j] = 2;
+			}
+		}
+	}
+	
+	public void lightUpEmptyCells() {
+		for (int i = 0; i < colorMatrix.length; i++) {
+			for (int j = 0; j < colorMatrix[i].length; j++) {
+				BoardCell cell = boardPanel.getBoardCellAt(i, j);
+				if(cell.getPiece() == null)
+					colorMatrix[i][j] = 2;
+			}
+		}
+	}
+	
+	public void lightUpFriendly(Tech tech) {
+		for (int i = 0; i < colorMatrix.length; i++) {
+			for (int j = 0; j < colorMatrix[i].length; j++) {
+				BoardCell cell = boardPanel.getBoardCellAt(i, j);
+				Piece p = cell.getPiece();
+				if(p != null && tech.isFriendly(p) && p != tech)
+					colorMatrix[i][j] = 2;
+			}
+		}
 	}
 
 	public static void main(String[] args) {

@@ -19,7 +19,6 @@ public class BoardPanel extends JPanel {
 			for (int j = board[i].length - 1; j >= 0; j--) {
 				board[i][j] = new BoardCell(controller, i, j);
 				BoardCell cell = board[i][j];
-				cell.addActionListener(controller);
 				add(cell);
 				cell.paintPiece();
 			}
@@ -34,32 +33,14 @@ public class BoardPanel extends JPanel {
 			for (int j = board[i].length - 1; j >= 0; j--) {
 				board[i][j] = new BoardCell(controller, i, j);
 				BoardCell cell = board[i][j];
-				cell.addActionListener(controller);
 				add(cell);
 				cell.paintPiece();
 			}
 		}
-		controller.getSuperHeroChess().getPayloadPanel().updatePayload(controller);
-//		this.revalidate();
-//		this.repaint();
-//		setVisible(true);
 	}
-
-
-	public void lightUpAvailableMoves() {
-		// makes green cells
-	}
-
-	public void lightUpAvailableAbilityMoves() {
-		// makes orange cells
-	}
-
-	public void lightOffAvailableMoves() {
-		// makes green cells
-	}
-
-	public void lightOffAvailableAbilityMoves() {
-		// makes orange cells
+	
+	public BoardCell getBoardCellAt(int i, int j) {
+		return board[i][j];
 	}
 
 	public void doAttackAnimation() {

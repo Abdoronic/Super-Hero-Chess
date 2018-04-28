@@ -11,10 +11,14 @@ import view.Assets.Assets;
 
 @SuppressWarnings("serial")
 public class PayloadPanel extends JPanel{
+	Controller controller;
+	
 	JLabel p1 ;
 	JLabel p2 ;
 	JLabel curName ;
+	
 	public PayloadPanel(Controller controller) {
+		this.controller = controller;
 		setLayout(new BorderLayout());
 		p1 = new JLabel();
 		p2 = new JLabel();
@@ -29,7 +33,7 @@ public class PayloadPanel extends JPanel{
 		this.add(curName, BorderLayout.CENTER);	
 		
 	}
-	public void updatePayload(Controller controller) {
+	public void updatePayload() {
 		String payloadP1 = "" + controller.getGame().getPlayer1().getPayloadPos() + ".PNG";
 		String payloadP2 = "" + controller.getGame().getPlayer2().getPayloadPos() + ".PNG";
 		p1.setIcon(new ImageIcon(Assets.class.getResource(payloadP1)));

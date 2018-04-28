@@ -20,7 +20,7 @@ public class InfoPanel extends JPanel {
 	JLabel currPlyrDeadChars;
 
 	public InfoPanel(Controller controller) {
-
+		this.controller = controller;
 		setLayout(new BorderLayout());
 		JButton abilityButton = new JButton("Ability");
 		abilityButton.addActionListener(controller);
@@ -34,8 +34,7 @@ public class InfoPanel extends JPanel {
 		currPlyrDeadChars.setHorizontalAlignment(JLabel.CENTER);
 	}
 
-	public void updateInfoPanel(Controller controller) {
-		
+	public void updateInfoPanel() {
 		String Info = controller.getSelectedPiece().getName() ;
 		if (controller.getSelectedPiece() instanceof ActivatablePowerHero) {
 			if (((ActivatablePowerHero) controller.getSelectedPiece()).isPowerUsed())

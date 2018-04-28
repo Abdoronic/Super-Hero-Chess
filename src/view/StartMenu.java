@@ -15,8 +15,8 @@ import controller.Controller;
 @SuppressWarnings("serial")
 public class StartMenu extends JFrame{
 	
-	final static int WIDTH = 400;
-	final static int HEIGHT = 300;
+	final static int WIDTH = 800;
+	final static int HEIGHT = 600;
 	final static int SCREEN_WIDTH = Toolkit.getDefaultToolkit().getScreenSize().width;
 	final static int SCREEN_HEIGHT = Toolkit.getDefaultToolkit().getScreenSize().height;
 	
@@ -32,7 +32,7 @@ public class StartMenu extends JFrame{
 	}
 	
 	public StartMenu(Controller controller) {
-		setUndecorated(true);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setBounds(SCREEN_WIDTH/2 - WIDTH/2, SCREEN_HEIGHT/2 - HEIGHT/2, WIDTH, HEIGHT);
 		setLayout(new BorderLayout());
 		JPanel inputPanel = new JPanel();
@@ -40,9 +40,14 @@ public class StartMenu extends JFrame{
 		textBox1 = new JTextField("");
 		textBox2 = new JTextField("");
 		
-		inputPanel.add(new JLabel("Enter The First Player's Name:\n"));
+		JLabel label1 = new JLabel("Enter The First Player's Name:\n");
+		label1.setFont(controller.getAssets().getGameFont(24f));
+		inputPanel.add(label1);
 		inputPanel.add(textBox1);
-		inputPanel.add(new JLabel("Enter The Second Player's Name:\n"));
+		
+		JLabel label2 = new JLabel("Enter The Second Player's Name:\n");
+		label2.setFont(controller.getAssets().getGameFont(24f));
+		inputPanel.add(label2);
 		inputPanel.add(textBox2);
 		inputPanel.add(new JLabel("\n\n"));
 		
@@ -55,11 +60,11 @@ public class StartMenu extends JFrame{
 		
 		buttonsPanel.add(enter);
 		buttonsPanel.add(quit);
-//		enter.setIcon(new ImageIcon(Assets.class.getResource("enter.png")));
+//		enter.setIcon(new ImageIcon(Assets.class.getResource("b.png")));
 		
 		add(inputPanel, BorderLayout.CENTER);
 		add(buttonsPanel, BorderLayout.SOUTH);
-		pack();
+//		pack();
 		setVisible(true);
 	}
 }
