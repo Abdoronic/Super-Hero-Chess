@@ -4,27 +4,26 @@ import java.awt.BorderLayout;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 import controller.Controller;
-import view.Assets.Assets;
 
 @SuppressWarnings("serial")
-public class PayloadPanel extends JPanel{
+public class PayloadPanel extends BackPanel{
 	Controller controller;
 	
-	JLabel p1 ;
-	JLabel p2 ;
-	JLabel curName ;
+	private JLabel p1 ;
+	private JLabel p2 ;
+	private JLabel curName ;
 	
 	public PayloadPanel(Controller controller) {
+		super(controller.getAssets().getPayloadBackground());
 		this.controller = controller;
 		setLayout(new BorderLayout());
 		p1 = new JLabel();
 		p2 = new JLabel();
 		curName = new JLabel();
-		p1.setIcon(new ImageIcon(Assets.class.getResource("0.PNG")));
-		p2.setIcon(new ImageIcon(Assets.class.getResource("0.PNG")));
+		p1.setIcon(new ImageIcon(controller.getAssets().getPayload("0p1")));
+		p2.setIcon(new ImageIcon(controller.getAssets().getPayload("0p2")));
 		controller.getGame();
 		curName.setText(controller.getGame().getPlayer1().getName());
 		curName.setHorizontalAlignment(JLabel.CENTER);
@@ -34,10 +33,10 @@ public class PayloadPanel extends JPanel{
 		
 	}
 	public void updatePayload() {
-		String payloadP1 = "" + controller.getGame().getPlayer1().getPayloadPos() + ".PNG";
-		String payloadP2 = "" + controller.getGame().getPlayer2().getPayloadPos() + ".PNG";
-		p1.setIcon(new ImageIcon(Assets.class.getResource(payloadP1)));
-		p2.setIcon(new ImageIcon(Assets.class.getResource(payloadP2)));
+		String payloadP1 = "" + controller.getGame().getPlayer1().getPayloadPos() + "p1";
+		String payloadP2 = "" + controller.getGame().getPlayer2().getPayloadPos() + "p2";
+		p1.setIcon(new ImageIcon(controller.getAssets().getPayload(payloadP1)));
+		p2.setIcon(new ImageIcon(controller.getAssets().getPayload(payloadP2)));
 		curName.setText(controller.getGame().getCurrentPlayer().getName());
 		
 	}
