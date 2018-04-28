@@ -21,9 +21,7 @@ public class SuperHeroChess extends JFrame{
 	public SuperHeroChess(Controller controller) {
 		setTitle("Super Hero Chess");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-//		setBounds(SCREEN_WIDTH/2 - WIDTH/2, SCREEN_HEIGHT/2 - HEIGHT/2, WIDTH, HEIGHT);
 		setExtendedState(JFrame.MAXIMIZED_BOTH); 
-//		setUndecorated(true);
 		setLayout(new BorderLayout());
 		
 		payloadPanel = new PayloadPanel(controller);

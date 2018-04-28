@@ -24,9 +24,9 @@ import model.pieces.heroes.Tech;
 import view.BoardButton;
 import view.BoardCell;
 import view.BoardPanel;
+import view.Graveyard;
 import view.InfoPanel;
 import view.PayloadPanel;
-import view.StartButton;
 import view.StartMenu;
 import view.StartPage;
 import view.SuperHeroChess;
@@ -75,25 +75,30 @@ public class Controller implements ActionListener {
 	public void actionPerformed(ActionEvent e) {	
 		JButton sourceButton = (JButton) e.getSource();
 		
-		if(sourceButton instanceof StartButton) {
+		if(sourceButton == startPage.getStartButton()) {
 			startPage.dispose();
 			startMenu = new StartMenu(this);
 			return;
 		}
 		
-		if(sourceButton.getActionCommand() == "Enter") {
+		if(sourceButton == startMenu.getNewGameButton()) {
 			startMenu.dispose();
 			buildGame(startMenu.getPlayer1(), startMenu.getPlayer2());
 			return;
 		}
 		
-		if(sourceButton.getActionCommand() == "Quit") {
+		if(sourceButton == startMenu.getQuitButton()) {
 			startMenu.dispose();
+			return;
+		}
+		
+		if(sourceButton == infoPanel.getGraveyardButton()) {
+			new Graveyard(this, superHeroChess, "Graveyard", true);
 			return;
 		}
 
 		// Checking if ability button is pressed
-		if (!(sourceButton instanceof BoardButton)) {
+		if (sourceButton ==  infoPanel.getAbilityButton()) {
 			if (selectedPiece == null) {
 				superHeroChess.displayMessage("You need to select a Hero to use their ability");
 			} else {
@@ -141,7 +146,7 @@ public class Controller implements ActionListener {
 			refresh();
 			return; // end action
 		}
-		System.out.println("Enterd Ability block");
+		
 		// Abilities
 		if (selectedSuper) {
 			Super superPiece = (Super) selectedPiece;
