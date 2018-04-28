@@ -31,6 +31,7 @@ import view.StartMenu;
 import view.StartPage;
 import view.SuperHeroChess;
 import view.Assets.Assets;
+import view.Assets.Sound;
 
 public class Controller implements ActionListener {
 
@@ -44,6 +45,8 @@ public class Controller implements ActionListener {
 	private BoardPanel boardPanel;
 	private PayloadPanel payloadPanel;
 	private InfoPanel infoPanel;
+	
+	private Sound sound;
 	
 	private int[][] colorMatrix;
 	
@@ -60,6 +63,8 @@ public class Controller implements ActionListener {
 	
 	public Controller() {
 		assets = new Assets();
+		sound = new Sound();
+		sound.startMusic();
 		colorMatrix = new int[6][7];
 		startPage = new StartPage(this);
 	}
@@ -89,6 +94,7 @@ public class Controller implements ActionListener {
 		}
 		
 		if(sourceButton == startMenu.getQuitButton()) {
+			sound.stopMusic();
 			startMenu.dispose();
 			return;
 		}
@@ -136,6 +142,7 @@ public class Controller implements ActionListener {
 				if (isEmpty(cell)) {
 					boardPanel.doMoveAnimation();
 				} else {
+					sound.PlayAttackSound();
 					boardPanel.doAttackAnimation();
 					boardPanel.doMoveAnimation();
 				}
@@ -309,6 +316,7 @@ public class Controller implements ActionListener {
 			return;
 		}
 		isAbility = true;
+		sound.playAbilitySound();
 		lightOffAvailableMoves();
 		if (p instanceof Medic) {
 			ArrayList<Piece> dead = p.getOwner().getDeadCharacters();
@@ -396,11 +404,13 @@ public class Controller implements ActionListener {
 		boardPanel.refresh();
 		payloadPanel.updatePayload();
 		if(game.getPlayer1().getPayloadPos() >= 6) {
+			sound.playWinSound();
 			superHeroChess.displayMessage(game.getPlayer1().getName() + " Won!");
 			superHeroChess.setVisible(false);
 			superHeroChess.dispose();
 			startMenu = new StartMenu(this);
 		} else if (game.getPlayer2().getPayloadPos() >= 6) {
+			sound.playWinSound();
 			superHeroChess.displayMessage(game.getPlayer2().getName() + " Won!");
 			superHeroChess.setVisible(false);
 			superHeroChess.dispose();
