@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="/Volumes/RONIC/jlayer1.0.1/jl1.0.1.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.launching.macosx.MacOSXType/Java SE 8 [1.8.0_144]"/>
+	<classpathentry kind="lib" path="/Users/abdulrahmanibrahim/eclipse-workspace/Super-Hero-Chess/jl1.0.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
