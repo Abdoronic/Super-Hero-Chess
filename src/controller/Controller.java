@@ -63,10 +63,10 @@ public class Controller implements ActionListener {
 	
 	public Controller() {
 		assets = new Assets();
-		sound = new Sound();
-		sound.startMusic();
 		colorMatrix = new int[6][7];
 		startPage = new StartPage(this);
+		sound = new Sound();
+		sound.startMusic();
 	}
 	
 	public void buildGame(String player1, String player2) {

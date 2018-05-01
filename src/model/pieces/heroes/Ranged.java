@@ -78,29 +78,33 @@ public class Ranged extends ActivatablePowerHero {
 		Piece p;
 		for (int k = i+1; k < 7; k++) {
 			p = getGame().getCellAt(k, j).getPiece();
-			if (p != null && !isFriendly(p)) {
-				allowedAbilityMoves.add(new Move(new Point(p.getPosI(), p.getPosJ()), Direction.DOWN));
+			if (p != null) {
+				if(!isFriendly(p))
+					allowedAbilityMoves.add(new Move(new Point(p.getPosI(), p.getPosJ()), Direction.DOWN));
 				break;
 			}
 		}
 		for (int k = i-1; k > -1; k--) {
 			p = getGame().getCellAt(k, j).getPiece();
-			if (p != null && !isFriendly(p)) {
-				allowedAbilityMoves.add(new Move(new Point(p.getPosI(), p.getPosJ()), Direction.UP));
+			if (p != null) {
+				if(!isFriendly(p))
+					allowedAbilityMoves.add(new Move(new Point(p.getPosI(), p.getPosJ()), Direction.UP));
 				break;
 			}
 		}
 		for (int k = j-1; k > -1; k--) {
 			p = getGame().getCellAt(i, k).getPiece();
-			if (p != null && !isFriendly(p)) {
-				allowedAbilityMoves.add(new Move(new Point(p.getPosI(), p.getPosJ()), Direction.LEFT));
+			if (p != null) {
+				if(!isFriendly(p))
+					allowedAbilityMoves.add(new Move(new Point(p.getPosI(), p.getPosJ()), Direction.LEFT));
 				break;
 			}
 		}
 		for (int k = j+1; k < 6; k++) {
 			p = getGame().getCellAt(i, k).getPiece();
-			if (p != null && !isFriendly(p)) {
-				allowedAbilityMoves.add(new Move(new Point(p.getPosI(), p.getPosJ()), Direction.RIGHT));
+			if (p != null) {
+				if(!isFriendly(p))
+					allowedAbilityMoves.add(new Move(new Point(p.getPosI(), p.getPosJ()), Direction.RIGHT));
 				break;
 			}
 		}

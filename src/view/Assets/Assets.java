@@ -90,8 +90,8 @@ public class Assets {
 				"SuperP1", "SuperP2", "TechP1", "TechP2"};
 		for(String name : names) {
 			character = new ImageIcon(Assets.class.getResource(name + ".gif"));
-			int widthMargin = 50;
-			int heightMargin = 0;
+			int widthMargin = 75;
+			int heightMargin = 10;
 			scaledCharacter = character.getImage().getScaledInstance
 					(cellWidth - widthMargin, cellHeight - heightMargin, Image.SCALE_DEFAULT);
 			characters.put(name, scaledCharacter);
