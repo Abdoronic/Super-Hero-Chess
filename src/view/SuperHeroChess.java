@@ -33,6 +33,7 @@ public class SuperHeroChess extends JFrame{
 		add(infoPanel, BorderLayout.SOUTH);
 		
 		pack();
+		setResizable(false);
 		setVisible(true);
 	}
 	

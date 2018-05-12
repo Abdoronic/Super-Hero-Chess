@@ -2,6 +2,7 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 
@@ -41,7 +42,8 @@ public class InfoPanel extends BackPanel {
 		setOpaque(false);
 		
 		info = new JPanel();
-		info.setLayout(new GridLayout(1, 6));
+//		info.setLayout(new GridLayout(1, 6));
+		info.setLayout(new FlowLayout());
 		info.setOpaque(false);
 		
 		buttons = new JPanel();
@@ -97,19 +99,19 @@ public class InfoPanel extends BackPanel {
 		Piece p = controller.getInfoPiece();
 		name.setText("   Name: ");
 		name.setForeground(Color.WHITE);
-		nameDesc.setText(p.getName());
+		nameDesc.setText(p.getName() + "   ");
 		nameDesc.setForeground(Color.WHITE);
 		
-		category.setText("Class: ");
+		category.setText("   " + "Class: ");
 		category.setForeground(Color.WHITE);
 		if(p instanceof SideKick)
-			categoryDesc.setText("SideKick");
+			categoryDesc.setText("SideKick" + "   ");
 		else
-			categoryDesc.setText(p.getClass().getSimpleName());
+			categoryDesc.setText(p.getClass().getSimpleName() + "   ");
 		categoryDesc.setForeground(Color.WHITE);
 
 		if (p instanceof ActivatablePowerHero) {
-			power.setText("Power:");
+			power.setText("   " + "Power:");
 			power.setForeground(Color.WHITE);
 			if (((ActivatablePowerHero) p).isPowerUsed()) {
 				powerDesc.setText("Power Used");
@@ -120,7 +122,7 @@ public class InfoPanel extends BackPanel {
 				powerDesc.setForeground(Color.GREEN.darker());
 			}
 		} else if (p instanceof Armored) {
-			power.setText("Armor:");
+			power.setText("   " + "Armor:");
 			power.setForeground(Color.WHITE);
 			if (((Armored) p).isArmorUp()) {
 				powerDesc.setText("Armor Is Up");
