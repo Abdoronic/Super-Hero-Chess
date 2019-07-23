@@ -36,4 +36,12 @@
 ### Winning Condition
 
 A player wins whenever his/her payload reaches the enemy’s base. This means that the payload
-has moved six steps by doing six kills.
+has moved six steps.
+
+### Payload Movement
+
+The friendly payload moves one step after:
+1. Eliminating one enemy hero piece.
+1. Eliminating two enemy sidekick pieces.
+
+For watching a game demo: [Gameplay](https://drive.google.com/file/d/1kIkSqQeSsQlL7402YvpGXV0QHda3kPnS/view)
