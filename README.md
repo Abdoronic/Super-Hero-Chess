@@ -44,4 +44,6 @@ The friendly payload moves one step after:
 1. Eliminating one enemy hero piece.
 1. Eliminating two enemy sidekick pieces.
 
-For watching a game demo: [Gameplay](https://drive.google.com/file/d/1kIkSqQeSsQlL7402YvpGXV0QHda3kPnS/view)
+
+Watch this [video](https://drive.google.com/file/d/1kIkSqQeSsQlL7402YvpGXV0QHda3kPnS/view) for a full gameplay demo.
+
